@@ -60,24 +60,71 @@
             style="@style/InputCustom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
             android:drawableLeft="@drawable/icon_person"
+            android:drawablePadding="12dp"
             android:ems="10"
             android:fontFamily="@font/montserrat"
             android:hint="Juan Carlos"
             android:inputType="textPersonName"
             android:textColor="#535353" />
+
+        <EditText
+            android:id="@+id/editText2"
+            style="@style/InputCustom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:drawableLeft="@drawable/icon_mail"
+            android:drawablePadding="12dp"
+            android:ems="10"
+            android:fontFamily="@font/montserrat"
+            android:hint="juanito13@gmail.com"
+            android:inputType="textPersonName"
+            android:textColor="#535353" />
+
+        <EditText
+            android:id="@+id/editText3"
+            style="@style/InputCustom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:drawableLeft="@drawable/icon_secure"
+            android:drawablePadding="12dp"
+            android:ems="10"
+            android:fontFamily="@font/montserrat"
+            android:hint="@string/pass_hint"
+            android:inputType="textPassword"
+            android:textColor="#535353" />
+
+        <EditText
+            android:id="@+id/editText4"
+            style="@style/InputCustom"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_person"
+            android:drawablePadding="12dp"
+            android:ems="10"
+            android:fontFamily="@font/montserrat"
+            android:hint="Suscripción anual (hasta 2020)"
+            android:inputType="textPersonName"
+            android:textColor="#535353" />
     </LinearLayout>
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/btnSaveInfoProfile"
         style="@style/ButtonBorderGreen"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="45dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="40dp"
-        android:text="Button"
+        android:layout_width="280dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="Guardar"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.94" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Help2Meal</string>
+    <string name="pass_hint">**********</string>
 </resources>

@@ -29,8 +29,13 @@ dependencies {
 
     // custom libraries
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
+    implementation("com.squareup.okhttp3:okhttp:4.0.1")
     implementation 'com.tapadoo.android:alerter:4.0.2'
-    implementation 'com.facebook.fresco:animated-gif:2.0.0'
+    implementation 'com.facebook.fresco:fresco:2.0.0'
+    implementation 'com.android.billingclient:billing:2.0.1'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.orhanobut:hawk:2.0.1'
+    implementation 'com.allattentionhere:fabulousfilter:0.0.5'
+    implementation "com.facebook.fresco:imagepipeline-okhttp3:2.0.0"
 
 }

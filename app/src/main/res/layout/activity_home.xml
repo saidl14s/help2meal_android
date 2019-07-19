@@ -5,8 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="#DBF5F5F5"
-    tools:context=".Alacena">
+    android:background="@drawable/activity_bg"
+    tools:context=".HomeActivity">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBlanco"
+        android:fontFamily="@font/montserrat_bold"
+        android:paddingTop="25dp"
+        android:paddingBottom="17dp"
+        android:text="Help2Meal | Inicio"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -19,31 +35,80 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/bg_home" />
 
-    <Button
-        android:id="@+id/button"
-        style="@style/ButtonLightMagenta"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+        <Button
+            android:id="@+id/button"
+            style="@style/ButtonPrimaryBlue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="showAlacena"
+            android:text="Mi Alacena" />
+
+        <Button
+            android:id="@+id/button2"
+            style="@style/ButtonPrimaryBlue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="showGustos"
+            android:text="Mis Preferencias" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="24dp"
-        android:onClick="resetAll"
-        android:text="ResetALL"
-        app:layout_constraintBottom_toTopOf="@+id/imageView2"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <Button
+            android:id="@+id/button6"
+            style="@style/ButtonPrimaryBlue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="showPerfil"
+            android:text="Mi Perfil" />
+
+        <Button
+            android:id="@+id/button3"
+            style="@style/ButtonPrimaryBlue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="showHistorial"
+            android:text="Recetas  Cocinadas" />
+    </LinearLayout>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btn_cocinar"
+        style="@style/ButtonLightMagentaBorder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="24dp"
-        android:onClick="showAlacena"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        android:layout_marginBottom="4dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="¡QUIERO COCINAR!"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

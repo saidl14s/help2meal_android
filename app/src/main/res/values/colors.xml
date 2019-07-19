@@ -6,4 +6,6 @@
     <color name="colorVerde">#00BA40</color>
     <color name="colorMorado">#6644CC</color>
     <color name="colorError">#D81B60</color>
+    <color name="colorBlanco">#FFFFFF</color>
+    <color name="colorAzul">#3497FD</color>
 </resources>

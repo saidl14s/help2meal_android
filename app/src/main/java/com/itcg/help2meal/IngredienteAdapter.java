@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.material.snackbar.Snackbar;
@@ -15,6 +16,9 @@ import com.google.android.material.snackbar.Snackbar;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+
+import nl.dionsegijn.steppertouch.OnStepCallback;
+import nl.dionsegijn.steppertouch.StepperTouch;
 
 public class IngredienteAdapter extends ArrayAdapter<Ingrediente> implements View.OnClickListener {
 
@@ -35,9 +39,6 @@ public class IngredienteAdapter extends ArrayAdapter<Ingrediente> implements Vie
     @Override
     public void onClick(View v) {
 
-        int position=(Integer) v.getTag();
-
-        Snackbar.make(v, "" +v.getId(), Snackbar.LENGTH_LONG).setAction("No action", null).show();
     }
 
     @Override
@@ -57,6 +58,16 @@ public class IngredienteAdapter extends ArrayAdapter<Ingrediente> implements Vie
         TextView tipo_cantidad = (TextView) convertView.findViewById(R.id.tv_cantidad_tipo);
         tipo_cantidad.setText(dataModel.getUnidad());
         //tipo_cantidad.setText(dataModel.get);
+        StepperTouch stepperTouch = convertView.findViewById(R.id.stepperTouch);
+        stepperTouch.setMinValue(0);
+        stepperTouch.setMaxValue(10000);
+        stepperTouch.setSideTapEnabled(true);
+        stepperTouch.addStepCallback(new OnStepCallback() {
+            @Override
+            public void onStep(int value, boolean positive) {
+                //Toast.makeText(context, value + "", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         convertView.setTag(viewHolder);

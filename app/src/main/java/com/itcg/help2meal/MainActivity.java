@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        StatusBarUtil.setLightMode(this);
         StatusBarUtil.setTransparent(this);
 
         initConfiguration();

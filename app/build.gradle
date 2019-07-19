@@ -37,5 +37,7 @@ dependencies {
     implementation 'com.orhanobut:hawk:2.0.1'
     implementation 'com.allattentionhere:fabulousfilter:0.0.5'
     implementation "com.facebook.fresco:imagepipeline-okhttp3:2.0.0"
+    implementation 'com.github.DanielMartinus:Stepper-Touch:1.0.1'
+
 
 }

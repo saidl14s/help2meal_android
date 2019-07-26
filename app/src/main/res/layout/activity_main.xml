@@ -33,7 +33,7 @@
 
             <Button
                 android:id="@+id/btn_activate_login"
-                style="@style/ButtonPrimaryMagenta"
+                style="@style/ButtonPrimaryGreen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -42,7 +42,7 @@
 
             <Button
                 android:id="@+id/btn_activate_signup"
-                style="@style/ButtonLightGreen"
+                style="@style/ButtonLightBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -62,7 +62,7 @@
             android:textColor="#fff"
             android:textSize="40sp"
             android:textStyle="bold"
-            app:fontFamily="@font/montserrat"
+            app:fontFamily="@font/montserrat_bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -90,9 +90,8 @@
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/montserrat_bold"
             android:text="¡Bienvenido!"
-            android:textColor="@color/colorMorado"
+            android:textColor="@color/colorVerde"
             android:textSize="34sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
@@ -103,10 +102,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:fontFamily="@font/montserrat"
+            android:fontFamily="@font/montserrat_regular"
             android:text="Nos encanta verte de nuevo"
             android:textAlignment="center"
-            android:textColor="#6644CC"
+            android:textColor="@color/colorVerde"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -127,7 +126,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_subtitle"
             app:layout_constraintVertical_bias="0.16"
-            tools:visibility="gone">
+            tools:visibility="visible">
 
             <EditText
                 android:id="@+id/et_email_login"
@@ -137,14 +136,13 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="15dp"
-                android:drawableLeft="@drawable/icon_magenta_person"
+                android:drawableLeft="@drawable/icon_green_mail_disabled"
                 android:drawablePadding="12dp"
                 android:ems="10"
-                android:fontFamily="@font/montserrat"
                 android:hint="hola@gmail.com"
                 android:inputType="textEmailAddress"
-                android:textColor="#6644CC"
-                android:textColorHint="#806644CC" />
+                android:textColor="@color/colorVerde"
+                android:textColorHint="@color/colorVerdeDisabled" />
 
             <EditText
                 android:id="@+id/et_password_login"
@@ -154,18 +152,17 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="15dp"
-                android:drawableLeft="@drawable/icon_magenta_secure"
+                android:drawableLeft="@drawable/icon_green_lock_disabled"
                 android:drawablePadding="12dp"
                 android:ems="10"
-                android:fontFamily="@font/montserrat"
                 android:hint="@string/pass_hint"
                 android:inputType="textPassword"
-                android:textColor="#6644CC"
-                android:textColorHint="#806644CC" />
+                android:textColor="@color/colorVerde"
+                android:textColorHint="@color/colorVerdeDisabled" />
 
             <ImageButton
                 android:id="@+id/btn_login"
-                style="@style/ButtonPrimaryMagenta"
+                style="@style/ButtonPrimaryGreen"
                 android:layout_width="108dp"
                 android:layout_height="44dp"
                 android:elevation="8dp"
@@ -185,7 +182,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_subtitle"
-            tools:visibility="visible">
+            tools:visibility="gone">
 
             <EditText
                 android:id="@+id/et_name_signup"
@@ -195,13 +192,12 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="15dp"
-                android:drawableLeft="@drawable/icon_person"
+                android:drawableLeft="@drawable/icon_blue_person_disabled"
                 android:drawablePadding="12dp"
-                android:fontFamily="@font/montserrat"
                 android:hint="Juan Carlos"
                 android:inputType="textPersonName"
-                android:textColor="#00BA40"
-                android:textColorHint="#8000BA40" />
+                android:textColor="@color/colorAzul"
+                android:textColorHint="@color/colorAzulDisabled" />
 
             <EditText
                 android:id="@+id/et_email_signup"
@@ -211,13 +207,12 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="15dp"
-                android:drawableLeft="@drawable/icon_mail"
+                android:drawableLeft="@drawable/icon_blue_mail_disabled"
                 android:drawablePadding="12dp"
-                android:fontFamily="@font/montserrat"
                 android:hint="hola@gmail.com"
                 android:inputType="textEmailAddress"
-                android:textColor="#00BA40"
-                android:textColorHint="#8000BA40" />
+                android:textColor="@color/colorAzul"
+                android:textColorHint="@color/colorAzulDisabled" />
 
             <EditText
                 android:id="@+id/et_password_signup"
@@ -227,13 +222,12 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="15dp"
-                android:drawableLeft="@drawable/icon_secure"
+                android:drawableLeft="@drawable/icon_blue_lock_disabled"
                 android:drawablePadding="12dp"
-                android:fontFamily="@font/montserrat"
                 android:hint="@string/pass_hint"
                 android:inputType="textPassword"
-                android:textColor="#00BA40"
-                android:textColorHint="#8000BA40" />
+                android:textColor="@color/colorAzul"
+                android:textColorHint="@color/colorAzulDisabled"/>
 
             <EditText
                 android:id="@+id/editText8"
@@ -243,18 +237,17 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="15dp"
-                android:drawableLeft="@drawable/icon_tag"
+                android:drawableLeft="@drawable/icon_blue_tag_disabled"
                 android:drawablePadding="12dp"
                 android:enabled="false"
-                android:fontFamily="@font/montserrat"
                 android:hint="Suscripción anual (hasta 2020)"
                 android:inputType="textPassword"
-                android:textColor="#00BA40"
-                android:textColorHint="#8000BA40" />
+                android:textColor="@color/colorAzul"
+                android:textColorHint="@color/colorAzulDisabled"/>
 
             <ImageButton
                 android:id="@+id/btn_signup"
-                style="@style/ButtonPrimaryGreen"
+                style="@style/ButtonPrimaryBlue"
                 android:layout_width="108dp"
                 android:layout_height="44dp"
                 android:elevation="8dp"

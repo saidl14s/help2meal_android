@@ -48,7 +48,7 @@
             android:numColumns="2"/>
 
         <GridView
-            android:id="@+id/lv_ingredientes"
+            android:id="@+id/gv_ingredientes"
             android:layout_width="match_parent"
             android:numColumns="2"
             android:layout_height="match_parent"

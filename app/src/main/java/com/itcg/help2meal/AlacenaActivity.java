@@ -1,22 +1,16 @@
 package com.itcg.help2meal;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -65,7 +59,7 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
 
         OkHttpClient httpClient = new OkHttpClient();
         OkHttpClient httpClientClasificacion = new OkHttpClient();
-        lv_ingredientes = (GridView) findViewById(R.id.lv_ingredientes);
+        lv_ingredientes = (GridView) findViewById(R.id.gv_ingredientes);
         gv_categories = (GridView) findViewById(R.id.gv_categories);
 
         dataIngredientes = new ArrayList<>();

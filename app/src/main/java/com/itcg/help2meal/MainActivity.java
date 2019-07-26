@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        StatusBarUtil.setLightMode(this);
         StatusBarUtil.setTransparent(this);
+        StatusBarUtil.setDarkMode(this);
 
         initConfiguration();
         activateButtons(); // accionar botones
@@ -67,12 +67,12 @@ public class MainActivity extends AppCompatActivity {
 
         if(vars.DEBUG){
             Hawk.put("access_token", vars.TOKEN_FAKE);
-            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            Intent intent = new Intent(MainActivity.this, HomeTabActivity.class);
             startActivity(intent);
             finish();
         }else{
             if(Hawk.contains("access_token")){
-                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                Intent intent = new Intent(MainActivity.this, HomeTabActivity.class);
                 startActivity(intent);
                 String token = Hawk.get("access_token");
                 finish();
@@ -115,8 +115,8 @@ public class MainActivity extends AppCompatActivity {
                 tv_title.setPadding(0,0,0,0);
                 tv_title.setText("¡Bienvenido!");
                 tv_subtitle.setText("Nos encanta verte de nuevo");
-                tv_title.setTextColor( getResources().getColor(R.color.colorMorado));
-                tv_subtitle.setTextColor( getResources().getColor(R.color.colorMorado));
+                tv_title.setTextColor( getResources().getColor(R.color.colorVerde));
+                tv_subtitle.setTextColor( getResources().getColor(R.color.colorVerde));
                 iv_logo.setVisibility(View.VISIBLE);
             }
         });
@@ -133,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
                 tv_title.setPadding(0,50,0,0);
                 tv_title.setText("Empecemos...");
                 tv_subtitle.setText("Cuida tu salud mientras te alimentas rico");
-                tv_title.setTextColor( getResources().getColor(R.color.colorVerde));
-                tv_subtitle.setTextColor( getResources().getColor(R.color.colorVerde));
+                tv_title.setTextColor( getResources().getColor(R.color.colorAzul));
+                tv_subtitle.setTextColor( getResources().getColor(R.color.colorAzul));
                 iv_logo.setVisibility(View.GONE);
 
             }

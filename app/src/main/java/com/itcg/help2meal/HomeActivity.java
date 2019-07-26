@@ -22,8 +22,14 @@ public class HomeActivity extends AppCompatActivity {
         Hawk.init(this).build();
     }
 
+
+    public void showRecipesComida(View view){
+
+    }
+
     public void showAlacena(View view){
-        Intent intent = new Intent(this, AlacenaActivity.class);
+        //Intent intent = new Intent(this, AlacenaActivity.class);
+        Intent intent = new Intent(this, HomeTabActivity.class);
         startActivity(intent);
     }
 

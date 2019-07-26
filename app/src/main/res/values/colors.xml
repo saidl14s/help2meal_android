@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#00BA40</color>
+    <color name="colorPrimaryDark">#009B35</color>
+
     <color name="colorVerde">#00BA40</color>
-    <color name="colorMorado">#6644CC</color>
-    <color name="colorError">#D81B60</color>
-    <color name="colorBlanco">#FFFFFF</color>
     <color name="colorAzul">#3497FD</color>
+    <color name="colorComplemento">#3ACCE1</color>
+    <color name="colorBlanco">#FFFFFF</color>
+    <color name="colorError">#D81B60</color>
+    <color name="colorErrorMaterial">#FF4F9A</color>
+    <color name="colorWarningMaterial">#FFB900</color>
+    <color name="colorTextInputHint">#535353</color>
+    <color name="colorTitleDark">#2A2E43</color>
+    <color name="colorTitle">#707070</color>
+    <color name="colorTextPrimary">#B7B7B7</color>
+
+    <color name="colorVerdeDisabled">#8000BA40</color>
+    <color name="colorAzulDisabled">#803497FD</color>
+    <color name="colorTextInputHintDisabled">#80535353</color>
+
+
 </resources>

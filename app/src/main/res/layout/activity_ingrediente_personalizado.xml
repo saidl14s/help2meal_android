@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    tools:context=".IngredientePersonalizadoActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="0dp"
+        android:layout_height="265dp"
+        android:background="@drawable/bannertop_ingrediente"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="45dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Agrega tu propio ingrediente aquí"
+            android:textColor="#fff"
+            android:textSize="@dimen/dimen_subtitle_hero"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Ingrediente"
+            android:textColor="#fff"
+            android:textSize="@dimen/dimen_title_hero"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+        <EditText
+            android:id="@+id/editText"
+            style="@style/InputCustom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:drawableLeft="@drawable/icon_spices"
+            android:drawablePadding="@dimen/space_between_icon__text_input"
+            android:ems="10"
+            android:fontFamily="@font/montserrat_regular"
+            android:hint="Aceite de arroz"
+            android:inputType="textPersonName"
+            android:textColor="@color/colorTextInputHint" />
+
+        <EditText
+            android:id="@+id/editText2"
+            style="@style/InputCustom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:drawableLeft="@drawable/icon_scale"
+            android:drawablePadding="@dimen/space_between_icon__text_input"
+            android:ems="10"
+            android:fontFamily="@font/montserrat_regular"
+            android:hint="Kilogramo"
+            android:inputType="textPersonName"
+            android:textColor="@color/colorTextInputHint" />
+
+        <EditText
+            android:id="@+id/editText3"
+            style="@style/InputCustom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:drawableLeft="@drawable/icon_jar"
+            android:drawablePadding="@dimen/space_between_icon__text_input"
+            android:ems="10"
+            android:fontFamily="@font/montserrat_regular"
+            android:hint="10 días de caducidad"
+            android:inputType="numberDecimal"
+            android:textColor="@color/colorTextInputHint" />
+
+        <EditText
+            android:id="@+id/editText4"
+            style="@style/InputCustom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_camera"
+            android:drawablePadding="@dimen/space_between_icon__text_input"
+            android:ems="10"
+            android:fontFamily="@font/montserrat_regular"
+            android:hint="Imagen del ingrediente"
+            android:inputType="textPersonName"
+            android:textColor="@color/colorTextInputHint" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnAddIngredient"
+        style="@style/ButtonBorderBlue"
+        android:layout_width="280dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="32dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:layout_marginEnd="32dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="Agregar"
+        android:onClick="actionAddIngredient"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.94" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+

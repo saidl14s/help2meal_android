@@ -3,62 +3,71 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#fff</item>
-        <item name="colorPrimaryDark">#fff</item>
-        <item name="colorAccent">#00BA40</item>
-        <item name="android:textColorPrimary">#707070</item>
-        <item name="titleTextColor">#707070</item>
+        <item name="colorPrimary">@color/colorBlanco</item>
+        <item name="colorPrimaryDark">@color/colorBlanco</item>
+        <item name="colorAccent">@color/colorVerde</item>
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+        <item name="titleTextColor">@color/colorTitleDark</item>
     </style>
 
     <style name="ButtonCustomGlobal">
-        <item name="android:fontFamily">@font/montserrat</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:elevation">8dp</item>
         <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
     </style>
 
-    <style name="ButtonPrimaryMagenta" parent="ButtonCustomGlobal">
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:background">@drawable/button_magenta_border</item>
+    <style name="StyleTitleTolbarCustom">
+        <item name="android:fontFamily">@font/montserrat_black</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/colorTitle</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:gravity">center</item>
     </style>
 
-    <style name="ButtonLightMagenta" parent="ButtonCustomGlobal">
-        <item name="android:textColor">#6644CC</item>
-        <item name="android:background">#ffffff</item>
+    <style name="ButtonLightAzul" parent="ButtonCustomGlobal">
+        <item name="android:textColor">@color/colorAzul</item>
+        <item name="android:background">@color/colorBlanco</item>
     </style>
-    <style name="ButtonLightMagentaBorder" parent="ButtonCustomGlobal">
-        <item name="android:textColor">#6644CC</item>
-        <item name="android:background">@drawable/button_magenta_v2_border</item>
+    <!--suppress AndroidDomInspection -->
+    <style name="ButtonLightVerdeBorder" parent="ButtonCustomGlobal">
+        <item name="android:textColor">@color/colorAzul</item>
+
     </style>
 
     <style name="ButtonPrimaryBlue" parent="ButtonCustomGlobal">
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:background">#3497FD</item>
+        <item name="android:textColor">@color/colorBlanco</item>
+        <item name="android:background">@color/colorAzul</item>
     </style>
 
     <style name="ButtonLightBlue" parent="ButtonCustomGlobal">
-        <item name="android:textColor">#3497FD</item>
-        <item name="android:background">#ffffff</item>
+        <item name="android:textColor">@color/colorAzul</item>
+        <item name="android:background">@color/colorBlanco</item>
     </style>
 
     <style name="ButtonPrimaryGreen" parent="ButtonCustomGlobal">
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">@color/colorBlanco</item>
         <item name="android:background">@drawable/button_greenv2_border</item>
     </style>
 
     <style name="ButtonLightGreen" parent="ButtonCustomGlobal">
-        <item name="android:textColor">#00BA40</item>
+        <item name="android:textColor">@color/colorBlanco</item>
         <item name="android:background">@drawable/button_greenv3_border</item>
     </style>
 
     <style name="ButtonPrimaryGreenGradient" parent="ButtonCustomGlobal">
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">@color/colorBlanco</item>
         <item name="android:background">@drawable/gradient_green</item>
     </style>
 
     <style name="ButtonBorderGreen" parent="ButtonCustomGlobal">
         <item name="android:textColor">#00BA40</item>
         <item name="android:background">@drawable/button_green_border</item>
+    </style>
+
+    <style name="ButtonBorderBlue" parent="ButtonCustomGlobal">
+        <item name="android:textColor">@color/colorAzul</item>
+        <item name="android:background">@drawable/button_blue_border</item>
     </style>
 
     <style name="ButtonCategoryDefault" parent="ButtonCustomGlobal">
@@ -77,6 +86,7 @@
         <item name="android:background">@drawable/edittext_border</item>
         <item name="android:textSize">16dp</item>
         <item name="android:padding">12dp</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
     </style>
 
 </resources>

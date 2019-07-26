@@ -97,17 +97,30 @@
 
     <Button
         android:id="@+id/btn_cocinar"
-        style="@style/ButtonLightMagentaBorder"
+        style="@style/ButtonLightGreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="36dp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:text="¡QUIERO COCINAR!"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:onClick="resetAll"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/btn_cocinar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

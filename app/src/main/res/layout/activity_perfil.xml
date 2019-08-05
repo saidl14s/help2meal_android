@@ -56,7 +56,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/et_name_user"
             style="@style/InputCustom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
             android:textColor="#535353" />
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/et_email_user"
             style="@style/InputCustom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
             android:textColor="#535353" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/et_password_user"
             style="@style/InputCustom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,23 +98,28 @@
             android:textColor="#535353" />
 
         <EditText
-            android:id="@+id/editText4"
+            android:id="@+id/et_suscripcion"
             style="@style/InputCustom"
+            android:editable="false"
+            android:focusable="false"
+            android:clickable="true"
+            android:onClick="checkLicence"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/icon_green_tag"
             android:drawablePadding="12dp"
             android:ems="10"
             android:fontFamily="@font/montserrat_regular"
-            android:hint="Suscripción anual (hasta 2020)"
+            android:hint="Suscripción "
             android:inputType="textPersonName"
             android:textColor="#535353" />
     </LinearLayout>
 
     <Button
         android:id="@+id/btnSaveInfoProfile"
-        style="@style/ButtonBorderGreen"
+        style="@style/btn_green_primary"
         android:layout_width="280dp"
+        android:onClick="updateUserData"
         android:layout_height="49dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"

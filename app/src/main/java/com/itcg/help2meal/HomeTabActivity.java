@@ -72,48 +72,39 @@ public class HomeTabActivity extends AppCompatActivity implements BottomNavigati
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
+        Intent intent;
 
         switch (item.getItemId()) {
             case R.id.nav_home:
-                StatusBarUtil.setColor(this, getResources().getColor(R.color.colorBlanco),0);
-                StatusBarUtil.setLightMode(this);
                 fragment = new HomeFragment();
                 break;
 
             case R.id.nav_profile:
-                StatusBarUtil.setColor(this, getResources().getColor(R.color.colorVerde), 0);
-                navigation.setBackgroundColor(getResources().getColor(R.color.colorVerde));
-                fragment = new ProfileFragment();
+                intent = new Intent(this, PerfilActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.nav_cupboard:
-                fragment = new CupboardFragment();
+                intent = new Intent(this, AlacenaActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.nav_preferences:
-                fragment = new PreferencesFragment();
+                intent = new Intent(this, GustosActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.nav_recipes:
-                fragment = new RecipesFragment();
+                intent = new Intent(this, HistorialActivity.class);
+                startActivity(intent);
                 break;
         }
 
         return loadFragment(fragment);
     }
 
-
-    public void showRecipesComida(View view){
-        //Toast.makeText(this, "HAY CLICK", Toast.LENGTH_LONG).show();
+    public void resetAll(View view){
+        Hawk.deleteAll();
     }
-
-    public void addIngredient(View view){
-        loadFragment(new CupboardFragment());
-    }
-
-    public void  saveIngredients(View view){
-
-    }
-
 
 }

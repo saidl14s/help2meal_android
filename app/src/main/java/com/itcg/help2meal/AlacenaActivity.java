@@ -224,11 +224,16 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                         .addHeader("X-Requested-With","XMLHttpRequest")
                         .addHeader("Authorization" , "Bearer " + token_user)
                         .build();
-                Intent intent = new Intent(AlacenaActivity.this, HomeActivity.class);
+                Intent intent = new Intent(AlacenaActivity.this, HomeTabActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
+    }
+
+    public void showNuevoIngredienteActivity(View view){
+        Intent intent = new Intent(AlacenaActivity.this, IngredientePersonalizadoActivity.class);
+        startActivity(intent);
     }
 
 

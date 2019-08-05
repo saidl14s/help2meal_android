@@ -82,13 +82,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*public void showNotAcceptRegistration(View view){
+        Alerter.create(MainActivity.this)
+                .setTitle("Lo sentimos...")
+                .setText("Por el momento no aceptamos nuevos usuarios, intentalo después.")
+                .enableProgress(false)
+                .setBackgroundColorRes(R.color.colorErrorMaterial)
+                .show();
+    }*/
+
     public void activateButtons(){
         lyt_ctrol_login = (LinearLayout) findViewById(R.id.lyt_ctrol_login);
         lyt_ctrol_signup = (LinearLayout) findViewById(R.id.lyt_ctrol_signup);
 
         // Login active, register dissabled
         lyt_ctrol_login.setVisibility(View.VISIBLE);
-        lyt_ctrol_signup.setVisibility(View.INVISIBLE);
+        lyt_ctrol_signup.setVisibility(View.GONE);
 
         tv_main = (TextView) findViewById(R.id.tv_main);
         tv_title = (TextView) findViewById(R.id.tv_title);
@@ -103,14 +112,14 @@ public class MainActivity extends AppCompatActivity {
         iv_logo = (ImageView) findViewById(R.id.iv_logo);
 
 
-        Button btn_activate_login = (Button) findViewById(R.id.btn_activate_login);
+        final Button btn_activate_login = (Button) findViewById(R.id.btn_activate_login);
         btn_activate_login.setOnClickListener( new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 lyt_ctrol_login.setVisibility(View.VISIBLE);
-                lyt_ctrol_signup.setVisibility(View.INVISIBLE);
+                lyt_ctrol_signup.setVisibility(View.GONE);
                 tv_main.setText("Iniciar sesión");
                 tv_title.setPadding(0,0,0,0);
                 tv_title.setText("¡Bienvenido!");
@@ -127,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                lyt_ctrol_login.setVisibility(View.INVISIBLE);
+                lyt_ctrol_login.setVisibility(View.GONE);
                 lyt_ctrol_signup.setVisibility(View.VISIBLE);
                 tv_main.setText("Registro");
                 tv_title.setPadding(0,50,0,0);
@@ -183,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                         if(response.isSuccessful() && response.message() != "Unauthorized"){
                             try{
                                 String i = response.body().string();
-                                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                                Intent intent = new Intent(MainActivity.this, HomeTabActivity.class);
                                 startActivity(intent);
 
                                 Gson gson = new Gson();

@@ -14,7 +14,7 @@ public class IngredientePersonalizadoActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingrediente_personalizado);
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAzul));
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorAzul),0);
     }
 
     public void actionAddIngredient (View view){

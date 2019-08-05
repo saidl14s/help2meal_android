@@ -15,7 +15,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="0dp"
         android:background="@color/colorBlanco"
-        android:padding="3dp"
+
         android:fontFamily="@font/montserrat_bold"
         android:text="Selecciona lo que te describa"
         android:textAlignment="center"
@@ -24,5 +24,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enfermedades"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="79dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

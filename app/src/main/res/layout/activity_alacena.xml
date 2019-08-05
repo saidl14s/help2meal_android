@@ -78,20 +78,13 @@
             android:textColor="#fff" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/btn_new_ingredient"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:onClick="showNuevoIngredienteActivity"
             android:background="@color/colorVerde"
             android:text="Nuevo ingrediente"
             android:textColor="#fff" />
-
-        <ImageButton
-            android:id="@+id/button5"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorVerde"
-            app:srcCompat="@drawable/icon_search" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

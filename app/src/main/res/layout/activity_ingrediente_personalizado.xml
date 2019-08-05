@@ -113,7 +113,7 @@
 
     <Button
         android:id="@+id/btnAddIngredient"
-        style="@style/ButtonBorderBlue"
+        style="@style/btn_blue_primary"
         android:layout_width="280dp"
         android:layout_height="49dp"
         android:layout_marginStart="32dp"

@@ -5,6 +5,6 @@
     <gradient
         android:startColor="#00BA40"
         android:endColor="#0FEF5C"
-        android:angle="270" />
-    <corners android:radius="10dp" />
+        android:angle="-90" />
+    <corners android:radius="@dimen/dimen_button_border_radius" />
 </shape>

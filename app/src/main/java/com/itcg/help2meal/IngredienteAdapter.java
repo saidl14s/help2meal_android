@@ -44,7 +44,7 @@ public class IngredienteAdapter extends ArrayAdapter<Ingrediente> implements Vie
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        Ingrediente dataModel = getItem(position);
+        final Ingrediente dataModel = getItem(position);
 
 
         viewHolder = new ViewHolder();
@@ -65,7 +65,9 @@ public class IngredienteAdapter extends ArrayAdapter<Ingrediente> implements Vie
         stepperTouch.addStepCallback(new OnStepCallback() {
             @Override
             public void onStep(int value, boolean positive) {
-                //Toast.makeText(context, value + "", Toast.LENGTH_SHORT).show();
+                dataModel.setCantidad(value);
+                Toast.makeText(context, dataModel.getCantidad() + "", Toast.LENGTH_SHORT).show();
+
             }
         });
 

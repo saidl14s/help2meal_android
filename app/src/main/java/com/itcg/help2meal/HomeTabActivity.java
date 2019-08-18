@@ -7,9 +7,6 @@ import androidx.fragment.app.Fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -26,6 +23,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.hawk.Hawk;
+import com.smarteist.autoimageslider.IndicatorAnimations;
+import com.smarteist.autoimageslider.IndicatorView.draw.controller.DrawController;
+import com.smarteist.autoimageslider.SliderView;
 import com.tapadoo.alerter.Alerter;
 
 import java.io.IOException;
@@ -35,13 +35,18 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class HomeTabActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     BottomNavigationView navigation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +54,21 @@ public class HomeTabActivity extends AppCompatActivity implements BottomNavigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_tab);
         StatusBarUtil.setLightMode(this);
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+        final ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
+                .newBuilder(this, okHttpClient)
+                .build();
+        Fresco.initialize(this,config);
+
         Hawk.init(this).build();
 
         loadFragment(new HomeFragment());
 
         navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(this);
+
+        //loadLastRecipes();
     }
 
     private boolean loadFragment(Fragment fragment) {
@@ -69,6 +83,20 @@ public class HomeTabActivity extends AppCompatActivity implements BottomNavigati
         return false;
     }
 
+
+    public void clickLoadRecipe(View v){
+        loadRecipe("Comida");
+    }
+
+    public void loadRecipe(String type){
+        /*Intent intent = new Intent(this, RecetaActivity.class);
+        intent.putExtra("type", type);
+        startActivity(intent);*/
+        Intent intent = new Intent(this, ResultadosActivity.class);
+        startActivity(intent);
+
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
@@ -79,8 +107,8 @@ public class HomeTabActivity extends AppCompatActivity implements BottomNavigati
                 fragment = new HomeFragment();
                 break;
 
-            case R.id.nav_profile:
-                intent = new Intent(this, PerfilActivity.class);
+            case R.id.nav_recipes:
+                intent = new Intent(this, HistorialActivity.class);
                 startActivity(intent);
                 break;
 
@@ -94,8 +122,9 @@ public class HomeTabActivity extends AppCompatActivity implements BottomNavigati
                 startActivity(intent);
                 break;
 
-            case R.id.nav_recipes:
-                intent = new Intent(this, HistorialActivity.class);
+
+            case R.id.nav_profile:
+                intent = new Intent(this, PerfilActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -106,5 +135,7 @@ public class HomeTabActivity extends AppCompatActivity implements BottomNavigati
     public void resetAll(View view){
         Hawk.deleteAll();
     }
+
+
 
 }

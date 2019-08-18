@@ -1,24 +1,41 @@
 package com.itcg.help2meal;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
+import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.google.gson.Gson;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.hawk.Hawk;
 import com.tapadoo.alerter.Alerter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import okhttp3.Call;
@@ -29,7 +46,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity {
+import static androidx.appcompat.app.AlertDialog.*;
+
+public class MainActivity extends AppCompatActivity implements PurchasesUpdatedListener {
+
+    BillingClient mBillingClient;
 
     LinearLayout lyt_ctrol_login,
             lyt_ctrol_signup;
@@ -62,8 +83,94 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public boolean connectPlayStore(){
+
+        mBillingClient = BillingClient.newBuilder(this).enablePendingPurchases().setListener(this).build();
+
+        mBillingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    // The BillingClient is ready. You can query purchases here.
+
+                    Log.e(vars.TAG, "onBillingSetupFinished: " );
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                    Log.e(vars.TAG, "onBillingServiceDisconnected: " );
+            }
+        });
+        return true;
+    }
+
+    public void loadSuscriptions(View view){
+        /**
+         * To purchase an Subscription
+         */
+
+        List<String> skuList = new ArrayList<> ();
+        skuList.add(vars.SKU_MONTHLY);
+        skuList.add(vars.SKU_YEARLY);
+        SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+        params.setSkusList(skuList).setType(BillingClient.SkuType.SUBS);
+        mBillingClient.querySkuDetailsAsync(params.build(),
+                new SkuDetailsResponseListener() {
+                    @Override
+                    public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> skuDetailsList) {
+                        // Process the result.
+                        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && skuDetailsList != null) {
+                            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_item);
+                            for (SkuDetails skuDetails : skuDetailsList) {
+                                Log.e(vars.TAG, skuDetails.getTitle() + " "+ skuDetails.getPrice());
+                                arrayAdapter.add(skuDetails.getTitle() + " "+ skuDetails.getPrice());
+                            }
+                            showDialogSuscriptions(arrayAdapter, skuDetailsList);
+                        }
+                    }
+                });
+
+    }
+
+    public void showDialogSuscriptions( ArrayAdapter<String> aa, List<SkuDetails> sd){
+        final ArrayAdapter<String> arrayAdapter = aa;
+        final List<SkuDetails> skuDetailsList = sd;
+
+        //showSuscriptionsDialog(arrayAdapter, skuDetailsList);
+        Builder builderSingle = new Builder(MainActivity.this);
+        builderSingle.setTitle("Selecciona la suscripción");
+
+
+        builderSingle.setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                for (SkuDetails product : skuDetailsList) {
+                    if((product.getTitle() +" "+ product.getPrice()).equals(arrayAdapter.getItem(which))){
+                        final BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                                .setSkuDetails(product)
+                                .build();
+                        mBillingClient.launchBillingFlow(MainActivity.this, flowParams);
+
+                    }
+                }
+
+            }
+        });
+        builderSingle.show();
+    }
+
     public void initConfiguration(){
         Hawk.init(this).build();
+        //connectPlayStore();
 
         if(vars.DEBUG){
             Hawk.put("access_token", vars.TOKEN_FAKE);
@@ -78,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }
-
 
     }
 
@@ -292,4 +398,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onPurchasesUpdated(BillingResult billingResult, @Nullable List<Purchase> purchases) {
+        Log.e("Help2meal",""+billingResult.getResponseCode()+billingResult.getDebugMessage());
+        /*if(!purchases.isEmpty()){
+            for(Purchase purchase: purchases) {
+                // When every a new purchase is made
+                // Here we verify our purchase
+                if (!verifyValidSignature(purchase.getOriginalJson(), purchase.getSignature())) {
+                    // Invalid purchase
+                    // show error to user
+                    Log.i(vars.TAG, "Got a purchase: " + purchase + "; but signature is bad. Skipping...");
+                    return;
+                } else {
+                    // purchase is valid
+                    // Perform actions
+
+                }
+            }
+        }*/
+
+
+    }
+
+    private boolean verifyValidSignature(String signedData, String signature) {
+        try {
+            return Security.verifyPurchase(vars.PUBLIC_KEY_PLAYSTORE, signedData, signature);
+        } catch (IOException e) {
+            Log.e(vars.TAG, "Got an exception trying to validate a purchase: " + e);
+            return false;
+        }
+    }
 }

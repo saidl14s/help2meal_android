@@ -128,7 +128,8 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                                                         ingrediente.getUnidad(),
                                                         ingrediente.getCaducidad(),
                                                         ingrediente.getClasificacion_id(),
-                                                        ingrediente.getUrl_imagen()
+                                                        ingrediente.getUrl_imagen(),
+                                                        0
                                                 )
                                         );
                                     }
@@ -215,7 +216,7 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
         btn_save_ingredientes = (Button) findViewById(R.id.btn_save_ingredientes);
         btn_save_ingredientes.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String url = vars.URL_SERVER +"api/auth/ingredientes";
+                String url = vars.URL_SERVER +"api/auth/user-ingredientes-save";
                 String token_user = Hawk.get("access_token");
 
                 Request request = new Request.Builder()
@@ -224,12 +225,21 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                         .addHeader("X-Requested-With","XMLHttpRequest")
                         .addHeader("Authorization" , "Bearer " + token_user)
                         .build();
+                uploadInventario();
                 Intent intent = new Intent(AlacenaActivity.this, HomeTabActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
     }
+
+    public void uploadInventario(){
+        for(int x=0;x <dataIngredientes.size() ;x++) {
+            Log.e("Gelp2mEAL",dataIngredientes.get(x).getNombre() +" "+dataIngredientes.get(x).getId() + " "+dataIngredientes.get(x).getCantidad());
+        }
+    }
+
+
 
     public void showNuevoIngredienteActivity(View view){
         Intent intent = new Intent(AlacenaActivity.this, IngredientePersonalizadoActivity.class);
@@ -243,6 +253,7 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                uploadInventario(); // se sube lo que actualmente haya registrado
                 try{
                     Gson gson = new Gson();
 
@@ -259,7 +270,8 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                                         ingrediente.getUnidad(),
                                         ingrediente.getCaducidad(),
                                         ingrediente.getClasificacion_id(),
-                                        ingrediente.getUrl_imagen()
+                                        ingrediente.getUrl_imagen(),
+                                        0
                                 )
                         );
                     }

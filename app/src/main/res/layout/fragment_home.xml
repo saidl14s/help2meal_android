@@ -7,12 +7,33 @@
     android:background="@drawable/activity_bg"
     tools:context=".HomeTabActivity">
 
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/height_tolbar_custom"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorBlanco"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView5"
+            style="@style/StyleTitleTolbarCustom"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Help2Meal | Inicio" />
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
+        android:onClick="clickLoadRecipe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,6 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingEnd="4dp"
+            android:onClick="clickLoadRecipe"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/inicio_item_cena" />
 
@@ -42,6 +64,7 @@
             android:id="@+id/imageView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="clickLoadRecipe"
             android:layout_weight="1"
             android:paddingStart="4dp"
             android:scaleType="centerCrop"
@@ -61,35 +84,61 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout5"
+    <GridView
+        android:id="@+id/gv_last_recipes"
         android:layout_width="0dp"
-        android:layout_height="@dimen/height_tolbar_custom"
-        android:layout_marginTop="16dp"
-        android:background="@color/colorBlanco"
-        android:orientation="horizontal"
+        android:layout_height="350dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/textView5"
-            style="@style/StyleTitleTolbarCustom"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Help2Meal | Inicio" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/button8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="reset"
-        android:onClick="resetAll"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:numColumns="2"
+        android:horizontalSpacing="10dp"
+        android:verticalSpacing="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/tv_sadsadsa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Nuevas recetas"
+        android:textColor="@color/colorTitle"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gv_last_recipes" />
+
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_sadsadsa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <com.smarteist.autoimageslider.SliderView
+        android:id="@+id/new_recipes_slider"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:sliderAutoCycleDirection="back_and_forth"
+        app:sliderAutoCycleEnabled="true"
+        app:sliderCircularHandlerEnabled="true"
+        app:sliderIndicatorGravity="center_horizontal|bottom"
+        app:sliderIndicatorMargin="15dp"
+        app:sliderIndicatorOrientation="horizontal"
+        app:sliderIndicatorPadding="3dp"
+        app:sliderIndicatorRadius="2dp"
+        app:sliderIndicatorSelectedColor="#5A5A5A"
+        app:sliderIndicatorUnselectedColor="#FFF"
+        app:sliderScrollTimeInSec="1"
+        app:sliderStartAutoCycle="true" />
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

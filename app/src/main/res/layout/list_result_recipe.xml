@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/iv_banner_recipe_result"
+        android:layout_width="match_parent"
+        android:layout_height="145dp"
+        fresco:actualImageScaleType="focusCrop"
+        fresco:fadeDuration="300"
+        fresco:roundBottomEnd="false"
+        fresco:roundBottomStart="false"
+        fresco:roundedCornerRadius="20dp"
+        fresco:roundingBorderWidth="2dp" />
+
+    <TextView
+        android:id="@+id/tv_recipe_result_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8sp"
+        android:layout_weight="1"
+        android:fontFamily="@font/montserrat_black"
+        android:text=""
+        android:textAlignment="viewStart"
+        android:textColor="#707070"
+        android:layout_marginTop="12dp"
+
+        android:textSize="17sp" />
+    <TextView
+        android:id="@+id/tv_recipe_result_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8sp"
+        android:layout_weight="1"
+        android:fontFamily="@font/montserrat_regular_italic"
+        android:text=""
+        android:textAlignment="viewStart"
+        android:textColor="#707070"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="13dp"
+        android:textSize="13sp" />
+
+</LinearLayout>

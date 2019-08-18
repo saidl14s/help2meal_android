@@ -52,9 +52,14 @@ public class PerfilActivity extends AppCompatActivity {
     }
 
     public void updateUserData(View view){
+        progressdialog = new ProgressDialog(this);
+        progressdialog.setCancelable(true); //change to false
+        progressdialog.setTitle("Guardando información...");
+        progressdialog.show();
+
         OkHttpClient httpClient = new OkHttpClient();
 
-        String url = vars.URL_SERVER +"api/auth/user";
+        String url = vars.URL_SERVER +"api/auth/update";
         String token_user = Hawk.get("access_token");
 
         RequestBody formBody = new FormBody.Builder()
@@ -68,12 +73,23 @@ public class PerfilActivity extends AppCompatActivity {
                 .addHeader("Content-Type","application/x-www-form-urlencoded")
                 .addHeader("X-Requested-With","XMLHttpRequest")
                 .addHeader("Authorization" , "Bearer " + token_user)
-                .put(formBody)
+                .post(formBody)
                 .build();
-        progressdialog = new ProgressDialog(this);
-        progressdialog.setCancelable(true); //change to false
-        progressdialog.setTitle("Guardando información...");
-        progressdialog.show();
+        httpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(vars.TAG, e.getMessage());
+                progressdialog.dismiss();
+                // error
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                progressdialog.dismiss();
+
+            }
+        });
+
     }
 
     public void checkLicence(View view){

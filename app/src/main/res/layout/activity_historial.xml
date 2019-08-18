@@ -4,6 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HistorialActivity">
+    android:background="#F1F2F6"
+    tools:context=".ResultadosActivity">
 
+    <LinearLayout
+        android:id="@+id/ly_recipe_toolbar_history"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/height_tolbar_custom"
+        android:layout_marginTop="0dp"
+        android:background="@color/colorBlanco"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_tolbar_recipe_history"
+            style="@style/StyleTitleTolbarCustom"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Historial de preparaciones" />
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/gv_recipe_history"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:verticalSpacing="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ly_recipe_toolbar_history" />
 </androidx.constraintlayout.widget.ConstraintLayout>

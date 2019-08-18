@@ -7,30 +7,81 @@
     android:background="@drawable/activity_bg"
     tools:context=".GustosActivity">
 
-    <TextView
-        android:id="@+id/activity_title_gustos"
+    <LinearLayout
+        android:id="@+id/ly_recipe_toolbar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="0dp"
+        android:layout_height="@dimen/height_tolbar_custom"
+        android:layout_marginTop="30dp"
         android:background="@color/colorBlanco"
-
-        android:fontFamily="@font/montserrat_bold"
-        android:text="Selecciona lo que te describa"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_tolbar_recipe"
+            style="@style/StyleTitleTolbarCustom"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Selecciona lo que te describa" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/montserrat_bold"
         android:text="Enfermedades"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="79dp" />
+        android:textAlignment="textStart"
+        android:textColor="#454F63"
+        android:textSize="21sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ly_recipe_toolbar" />
+
+    <GridView
+        android:id="@+id/gv_enfermedades"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:verticalSpacing="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Gustos"
+        android:textAlignment="textStart"
+        android:textColor="#454F63"
+        android:textSize="21sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gv_enfermedades" />
+
+    <GridView
+        android:id="@+id/gv_gustos"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:verticalSpacing="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,17 +58,27 @@ public class Ingrediente {
         this.clasificacion_id = clasificacion_id;
     }
 
-    public Ingrediente(int id, String nombre, String unidad, int caducidad, int clasificacion_id, String url_imagen){
+    public Ingrediente(int id, String nombre, String unidad, int caducidad, int clasificacion_id, String url_imagen, int cantidad){
         this.id = id;
         this.nombre = nombre;
         this.unidad = unidad;
         this.caducidad = caducidad;
         this.clasificacion_id = clasificacion_id;
         this.url_imagen = url_imagen;
+        this.cantidad = cantidad;
     }
 
     public int getImageResourceId(){
         return 0;
     }
 
+    private int cantidad;
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
 }

@@ -2,8 +2,15 @@ package com.itcg.help2meal;
 
 public class Vars {
     public Vars(){ }
-    final String URL_SERVER = "http://842cd989.ngrok.io/";
+
+    final String EXTRA_MESSAGE = "Help2Meal_EXTRA";
+    final String URL_SERVER = "http://7cb30715.ngrok.io/";
     final String TAG = "Help2Meal_Log";
     final boolean DEBUG = true;
     final String TOKEN_FAKE ="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjlhNTM2ODYyNjFjNGY5ZjI1NTY0MjYxNzlhNzY5NWZlZjUzZmNiYzQ4N2FlYzBjMWZhNjBiOTNlZjE5YmY3NTJmMDU5NWMxMDkwNzJhMDJjIn0.eyJhdWQiOiIxIiwianRpIjoiOWE1MzY4NjI2MWM0ZjlmMjU1NjQyNjE3OWE3Njk1ZmVmNTNmY2JjNDg3YWVjMGMxZmE2MGI5M2VmMTliZjc1MmYwNTk1YzEwOTA3MmEwMmMiLCJpYXQiOjE1NjMzMTYzOTAsIm5iZiI6MTU2MzMxNjM5MCwiZXhwIjoxNTk0OTM4NzkwLCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.lENc9kJy8tP4-pDx3fAauIHYCzXe6_dgsBAU6r32HxzxFYRRS14QWpKq5AOww7toAgx-W6aHbgFgqoMuwKQ9HIp9HlyXsB13Gu-q72BcMNIASG82-I73H5zVdSCcozIn0wp_CBNiyXw2A8jN9S1joXLt0IY8cVvl3KkO0z6l4GgNLZixBmKHWBhKJls8uOuCABJm6AiCE_XF--jznvJB18xzv_pNe3VYyglHEy-w90MzxvgNzOvOEyoqrHQi6T7aef3ODqxXD0xJtwWRn2hJMJDK6nV8pk7csbERp75d9OPehn4d43hQzGJUtRZp02wmeseEQ8h-7m7WCamtpmjxUYzeTwT8M27wcAAn18_QXtBqywpg0h1X0E7dQShtMY9QgHXqBuHya5YfU3xnQYjSBvgSZp77-MoI305kYf4za7oErSgOVYS0yLUq2vhko3yj_12U3a8nCZOLGNoLq6Xr8JHpfjWgV8Ds5wl0b2zgVzbBff5iNIHx8O9nzxnsuhNnv6eB72Cyz_aPK3oISC0ZIZLaEdFQ6GALwrGMU7k1mMCjXYRsRuoXQuGECfSp0w6o41YMe8to_UqNfPaXwijqKz_rI6-gEx8g-p9ugwmPmDo0_Uyz__Nl6raXKcH0ACe1-XEusVQT0phiJ_hiMM6VMDKNjOHX4SuwhuNclMeCfRw";
+
+    // For suscription
+    final String PUBLIC_KEY_PLAYSTORE = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxEp7HbpJgIWtdW0MqaiHvvgu7csTNSHhXEoUS0vQ3lIvJvKnrLiTlAAd78Jwaq4jsd9mkEbNueAKFo6Rdz00LkP69L7+sfKIyISzspJTdtHGmOJ40CixeRScwDcUcNBM8RpbGHYb1+iFMRSPlhRM0Kxtc5/TZ9hhrJb+NzTzH6XRqf52yFUMSZYWq1X8soGyX1Q1yC4drb5cBPYPc41Vh3W3k4bXXkYsusIOQ61YFj6pPiEUp+eX3TLSVdggWxLhrdDuvBLtjQDW13uwcqwjeNEvknXBX+/mWSKJnV0IjrkQR1hCg35FZnFp0jx7dq/ZwKrEqvc/Bfq3J1W8sOFdBwIDAQAB";
+    final String SKU_YEARLY = "b8rid2pi8l3c6syykrzq.kj715tj8txntrkgr2gb0_anual";
+    final String SKU_MONTHLY ="yjwjmujoegli7yht0oz5.fls1if2ez7691t3hvul0_mensual";
 }

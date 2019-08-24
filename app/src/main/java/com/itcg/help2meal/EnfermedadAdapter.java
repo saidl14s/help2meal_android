@@ -52,14 +52,17 @@ public class EnfermedadAdapter extends ArrayAdapter<Enfermedad> implements View.
 
 
         CheckBox item = (CheckBox) convertView.findViewById(R.id.checkBox_enfermedad);
+        item.setChecked(dataModel.isActivo());
         item.setText(dataModel.getNombre());
         item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(((CompoundButton) view).isChecked()){
-                    Toast.makeText(context, "check "+dataModel.getNombre()+" "+dataModel.getId(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context, "check "+dataModel.getNombre()+" "+dataModel.getId(), Toast.LENGTH_LONG).show();
+                    dataModel.setActivo(true);
                 } else {
-                    Toast.makeText(context, "un-check "+dataModel.getNombre()+" "+dataModel.getId(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context, "un-check "+dataModel.getNombre()+" "+dataModel.getId(), Toast.LENGTH_LONG).show();
+                    dataModel.setActivo(false);
                 }
             }
         });

@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_v1"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/tools"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".RecetaActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecetaActivity">
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
     <LinearLayout
-        android:id="@+id/ly_recipe_toolbar"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/height_tolbar_custom"
-        android:layout_marginTop="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:background="@color/colorBlanco"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_tolbar_recipe"
@@ -24,149 +27,153 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginBottom="8dp"
             android:text="Receta seleccionada" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ly_banner_recipe"
-        android:layout_width="match_parent"
-        android:layout_height="225dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ly_recipe_toolbar">
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/iv_recipe_banner"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="200dp"
             android:scaleType="centerCrop"
+            android:layout_weight="1"
             fresco:actualImageScaleType="focusCrop"
             fresco:fadeDuration="300"
-            fresco:roundedCornerRadius="20dp"
-            fresco:roundBottomStart="false"
+            fresco:failureImage="@drawable/placeholder"
             fresco:roundBottomEnd="false"
-            fresco:roundingBorderWidth="2dp"
-            fresco:failureImage="@drawable/placeholder"/>
+            fresco:roundBottomStart="false"
+            fresco:roundedCornerRadius="20dp"
+            fresco:roundingBorderWidth="2dp" />
+
+        <TextView
+            android:id="@+id/tv_name_recipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/montserrat_black"
+            android:text=""
+            android:textAlignment="viewStart"
+            android:textColor="#2A2E43"
+            android:textSize="25sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name_recipe">
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/clock_gray" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_regular"
+                android:text=""
+                android:textColor="#707070"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/fork_gray" />
+
+            <TextView
+                android:id="@+id/tv_porcion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_regular"
+                android:text=""
+                android:textColor="#707070"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:text=""
+            android:textColor="#B7B7B7"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Ingredientes"
+            android:textColor="#707070"
+            android:textSize="19sp" />
+
+        <GridView
+            android:id="@+id/gv_ingredients_recipe_suggest"
+            android:layout_width="match_parent"
+            android:layout_height="520dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:numColumns="2" />
+
+        <TextView
+            android:id="@+id/tv_instructions_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Instrucciones"
+            android:textColor="#707070"
+            android:visibility="gone"
+            android:textSize="19sp" />
+
+        <TextView
+            android:id="@+id/tv_instructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:text="" />
+
+        <Button
+            android:id="@+id/btn_cocinar_now"
+            style="@style/btn_green_primary"
+            android:layout_width="320dp"
+            android:scrollbars="vertical"
+            android:onClick="cocinarNow"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="0dp"
+            android:text="¡Cocinar Ahora!" />
+
 
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/tv_name_recipe"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/montserrat_black"
-        android:text=""
-        android:textAlignment="viewStart"
-        android:textColor="#2A2E43"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ly_banner_recipe" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:gravity="center_horizontal|center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name_recipe">
-
-        <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/clock_gray" />
-
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:fontFamily="@font/montserrat_regular"
-            android:text=""
-            android:textColor="#707070"
-            android:textSize="12sp" />
-
-        <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/fork_gray" />
-
-        <TextView
-            android:id="@+id/tv_porcion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:fontFamily="@font/montserrat_regular"
-            android:text=""
-            android:textColor="#707070"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/montserrat_regular"
-        android:text=""
-        android:textColor="#B7B7B7"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/montserrat_bold"
-        android:text="Ingredientes"
-        android:textColor="#707070"
-        android:textSize="19sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_description" />
-
-    <GridView
-        android:id="@+id/gv_ingredients"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-    <Button
-        android:id="@+id/button2"
-        style="@style/btn_green_gradient"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="35dp"
-        android:text="Cocinar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gv_ingredients" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

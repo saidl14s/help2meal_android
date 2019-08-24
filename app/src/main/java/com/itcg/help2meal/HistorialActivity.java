@@ -3,6 +3,7 @@ package com.itcg.help2meal;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.backends.okhttp3.OkHttpImagePipelineConfigFactory;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.google.gson.Gson;
+import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
@@ -41,6 +43,8 @@ public class HistorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_historial);
+
+        StatusBarUtil.setLightMode(this);
 
         //gv_recipe_result
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -132,7 +136,9 @@ public class HistorialActivity extends AppCompatActivity {
         gv_results.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent(HistorialActivity.this, RecetaActivity.class);
+                intent.putExtra("id_recipe", ""+adapter.getItem(position).getId());
+                startActivity(intent);
             }
         });
     }

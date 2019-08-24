@@ -2,10 +2,6 @@ package com.itcg.help2meal;
 
 public class Ingrediente {
 
-    private int id;
-    private String nombre;
-    private String unidad;
-
     public String getUrl_imagen() {
         return url_imagen;
     }
@@ -13,10 +9,6 @@ public class Ingrediente {
     public void setUrl_imagen(String url_imagen) {
         this.url_imagen = url_imagen;
     }
-
-    private String url_imagen;
-    private int caducidad;
-    private int clasificacion_id;
 
     public int getId() {
         return id;
@@ -72,8 +64,6 @@ public class Ingrediente {
         return 0;
     }
 
-    private int cantidad;
-
     public int getCantidad() {
         return cantidad;
     }
@@ -81,4 +71,12 @@ public class Ingrediente {
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
+
+    private int id;
+    private String nombre;
+    private String unidad;
+    private String url_imagen;
+    private int caducidad;
+    private int clasificacion_id;
+    private int cantidad;
 }

@@ -74,6 +74,4 @@ public class Platillo {
     private String instrucciones;
     private String url_image;
 
-
-
 }

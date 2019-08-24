@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.hawk.Hawk;
+import com.tapadoo.alerter.Alerter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class GustosActivity extends AppCompatActivity {
         gv_enfermedades = (GridView) findViewById(R.id.gv_enfermedades);
 
 
-        String urlLastRecipes = vars.URL_SERVER +"api/auth/get-enfermedades";
+        String urlLastRecipes = vars.URL_SERVER +"api/auth/enfermedades-get";
         String token_user = Hawk.get("access_token");
 
         RequestBody formBody = new FormBody.Builder()
@@ -69,7 +70,7 @@ public class GustosActivity extends AppCompatActivity {
                 .addHeader("Content-Type","application/x-www-form-urlencoded")
                 .addHeader("X-Requested-With","XMLHttpRequest")
                 .addHeader("Authorization" , "Bearer " + token_user)
-                .post(formBody)
+        //.post(formBody)
                 .build();
 
         httpClient.newCall(request).enqueue(new Callback() {
@@ -97,7 +98,9 @@ public class GustosActivity extends AppCompatActivity {
                                         dataEnfermedades.add(
                                                 new Enfermedad(
                                                         enfermedad.getId(),
-                                                        enfermedad.getNombre()
+                                                        enfermedad.getNombre(),
+                                                        enfermedad.isActivo()
+
                                                 )
                                         );
                                     }
@@ -138,7 +141,7 @@ public class GustosActivity extends AppCompatActivity {
         gv_gustos = (GridView) findViewById(R.id.gv_gustos);
 
 
-        String urlLastRecipes = vars.URL_SERVER +"api/auth/get-gustos";
+        String urlLastRecipes = vars.URL_SERVER +"api/auth/gustos-get";
         String token_user = Hawk.get("access_token");
 
         RequestBody formBody = new FormBody.Builder()
@@ -151,7 +154,7 @@ public class GustosActivity extends AppCompatActivity {
                 .addHeader("Content-Type","application/x-www-form-urlencoded")
                 .addHeader("X-Requested-With","XMLHttpRequest")
                 .addHeader("Authorization" , "Bearer " + token_user)
-                .post(formBody)
+                //.post(formBody)
                 .build();
 
         httpClient.newCall(request).enqueue(new Callback() {
@@ -179,7 +182,8 @@ public class GustosActivity extends AppCompatActivity {
                                         dataGusto.add(
                                                 new Enfermedad(
                                                         enfermedad.getId(),
-                                                        enfermedad.getNombre()
+                                                        enfermedad.getNombre(),
+                                                        enfermedad.isActivo()
                                                 )
                                         );
                                     }
@@ -211,5 +215,79 @@ public class GustosActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), position+" "+adapterGusto.getItem(position).getNombre()+" " +adapterGusto.getItem(position).getId(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+
+    public void savePreferences(View view){
+        OkHttpClient httpClient = new OkHttpClient();
+
+        String url = vars.URL_SERVER +"api/auth/user-gustos-save"; //pendiente url
+        String token_user = Hawk.get("access_token");
+
+
+        for(int x = 0; x < dataGusto.size(); x++) {
+            Log.e("Gelp2mEAL",dataGusto.get(x).getNombre() +" "+dataGusto.get(x).getId() + " "+dataGusto.get(x).isActivo());
+            RequestBody formBody = new FormBody.Builder()
+                    .add("gusto_id", ""+dataGusto.get(x).getId())
+                    .add("activo", ""+dataGusto.get(x).isActivo())
+                    .build();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("Content-Type","application/x-www-form-urlencoded")
+                    .addHeader("X-Requested-With","XMLHttpRequest")
+                    .addHeader("Authorization" , "Bearer " + token_user)
+                    .post(formBody)
+                    .build();
+            httpClient.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Log.e(vars.TAG, e.getMessage());
+
+                    // error
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) {
+
+
+                }
+            });
+        }
+        url = vars.URL_SERVER +"api/auth/user-enfermedades-save"; //pendiente url
+        for(int x = 0; x < dataEnfermedades.size(); x++) {
+            Log.e("Gelp2mEAL",dataEnfermedades.get(x).getNombre() +" "+dataEnfermedades.get(x).getId() + " "+dataEnfermedades.get(x).isActivo());
+            RequestBody formBody = new FormBody.Builder()
+                    .add("enfermedad_id", ""+dataEnfermedades.get(x).getId())
+                    .add("activo", ""+dataEnfermedades.get(x).isActivo())
+                    .build();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("Content-Type","application/x-www-form-urlencoded")
+                    .addHeader("X-Requested-With","XMLHttpRequest")
+                    .addHeader("Authorization" , "Bearer " + token_user)
+                    .post(formBody)
+                    .build();
+            httpClient.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Log.e(vars.TAG, e.getMessage());
+
+                    // error
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) {
+
+
+                }
+            });
+        }
+        Alerter.create(GustosActivity.this)
+                .setTitle("Almacenado correctamente")
+                .setText("")
+                .setIcon(R.drawable.icon_check)
+                .setBackgroundColorRes(R.color.colorAqua)
+                .enableSwipeToDismiss()
+                .show();
     }
 }

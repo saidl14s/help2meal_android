@@ -59,6 +59,7 @@ public class IngredienteAdapter extends ArrayAdapter<Ingrediente> implements Vie
         tipo_cantidad.setText(dataModel.getUnidad());
         //tipo_cantidad.setText(dataModel.get);
         StepperTouch stepperTouch = convertView.findViewById(R.id.stepperTouch);
+        stepperTouch.setCount(dataModel.getCantidad());
         stepperTouch.setMinValue(0);
         stepperTouch.setMaxValue(10000);
         stepperTouch.setSideTapEnabled(true);
@@ -66,7 +67,8 @@ public class IngredienteAdapter extends ArrayAdapter<Ingrediente> implements Vie
             @Override
             public void onStep(int value, boolean positive) {
                 dataModel.setCantidad(value);
-                Toast.makeText(context, dataModel.getCantidad() + "", Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(context, dataModel.getCantidad() + "", Toast.LENGTH_SHORT).show();
 
             }
         });

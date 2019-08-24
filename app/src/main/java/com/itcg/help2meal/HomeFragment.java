@@ -1,6 +1,5 @@
 package com.itcg.help2meal;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,13 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.PagerAdapter;
 
 import com.google.gson.Gson;
 import com.orhanobut.hawk.Hawk;
@@ -22,7 +20,6 @@ import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.IndicatorView.draw.controller.DrawController;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
-import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +34,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
+import com.androidstudy.networkmanager.Monitor;
+import com.androidstudy.networkmanager.Tovuti;
+
 
 /**
  * Created by Belal on 1/23/2018.
@@ -49,30 +48,118 @@ public class HomeFragment extends Fragment {
     GridView gv_last;
     Vars vars = new Vars();
     ArrayList<LastRecipe> dataLastRecipes;
-    String responseData;
+    ArrayList<Slide> dataNewsRecipes;
+    String responseData,responseDataNews;
     private static LastRecipesAdapter adapter;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Tovuti.from(getContext()).monitor(new Monitor.ConnectivityListener(){
+            @Override
+            public void onConnectivityChanged(int connectionType, boolean isConnected, boolean isFast){
+                // TODO: Handle the connection...
+                if(isConnected){
+
+                    loadLastRecipes();
+                    loadNewRecipes();
+                }
+            }
+        });
+
+
+    }
+
+    private void loadNewRecipes(){
         sliderView = getActivity().findViewById(R.id.new_recipes_slider);
         sliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
         sliderView.setSliderTransformAnimation(SliderAnimations.FADETRANSFORMATION);
-        sliderView.setSliderAnimationDuration(2700);
+        sliderView.setSliderAnimationDuration(700);
         sliderView.setScrollTimeInSec(5);
-        final SliderAdapter adapter = new SliderAdapter(getContext());
-        adapter.setCount(4);
+
+        OkHttpClient httpClient = new OkHttpClient();
+
+        String urlNewRecipes = vars.URL_SERVER +"api/auth/new-recipes";
+        String token_user = Hawk.get("access_token");
+
+
+        Request request = new Request.Builder()
+                .url(urlNewRecipes)
+                .addHeader("Content-Type","application/x-www-form-urlencoded")
+                .addHeader("X-Requested-With","XMLHttpRequest")
+                .addHeader("Authorization" , "Bearer " + token_user)
+                .build();
+
+        httpClient.newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Call call, IOException e) {
+                Log.e(vars.TAG, e.getMessage());
+                // error
+            }
+
+            @Override public void onResponse(Call call, Response response) {
+                try{
+                    responseDataNews = response.body().string();
+                    if(response.isSuccessful()){
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try{
+                                    Gson gson = new Gson();
+
+                                    Slide[] mcArray = gson.fromJson(responseDataNews, Slide[].class);
+                                    List<Slide> prepareListRecipes = Arrays.asList(mcArray);
+                                    dataNewsRecipes= new ArrayList<>();
+
+                                    for (Slide recipe : prepareListRecipes) {
+                                        dataNewsRecipes.add(
+                                                new Slide(
+                                                        recipe.getUrl_image()
+                                                )
+                                        );
+                                    }
+
+                                    final SliderAdapter adapter = new SliderAdapter(getContext(), dataNewsRecipes);
+                                    adapter.setCount(dataNewsRecipes.size());
+
+                                    sliderView.setSliderAdapter(adapter);
+                                    //progressdialog.dismiss();
+                                }catch (Exception e){
+                                    Log.e(vars.TAG, e.getMessage());
+                                }
+
+                            }
+                        });
+
+                    } else {
+                        //Log.e(vars.TAG, response.message()+" "+response.body().toString() );
+                    }
+                }catch (Exception e){
+
+                }
+            }
+        });
+
+        /*ArrayList<Slide> slidesTest = new ArrayList<>();
+        slidesTest.add(new Slide("https://images.pexels.com/photos/1860207/pexels-photo-1860207.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"));
+        slidesTest.add(new Slide("https://images.pexels.com/photos/1860207/pexels-photo-1860207.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"));
+        slidesTest.add(new Slide("https://images.pexels.com/photos/1860207/pexels-photo-1860207.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"));
+        slidesTest.add(new Slide("https://images.pexels.com/photos/1860207/pexels-photo-1860207.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"));
+
+        final SliderAdapter adapter = new SliderAdapter(getContext(), slidesTest);
+        adapter.setCount(slidesTest.size());
+
 
         sliderView.setSliderAdapter(adapter);
+        */
+
+
         sliderView.setOnIndicatorClickListener(new DrawController.ClickListener() {
             @Override
             public void onIndicatorClicked(int position) {
                 sliderView.setCurrentPagePosition(position);
             }
         });
-
-        loadLastRecipes();
     }
 
     private void loadLastRecipes(){
@@ -152,6 +239,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                Intent intent = new Intent(getContext(), RecetaActivity.class);
+                intent.putExtra("id_recipe", ""+adapter.getItem(position).getId());
+                startActivity(intent);
             }
         });
     }

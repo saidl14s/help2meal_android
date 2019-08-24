@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center"
     android:background="#ffffff"
     android:orientation="vertical">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/iv_banner_recipe_result"
         android:layout_width="match_parent"
-        android:layout_height="145dp"
+        android:layout_height="150dp"
         fresco:actualImageScaleType="focusCrop"
         fresco:fadeDuration="300"
         fresco:roundBottomEnd="false"
@@ -38,7 +39,6 @@
         android:layout_weight="1"
         android:fontFamily="@font/montserrat_regular_italic"
         android:text=""
-        android:textAlignment="viewStart"
         android:textColor="#707070"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="13dp"

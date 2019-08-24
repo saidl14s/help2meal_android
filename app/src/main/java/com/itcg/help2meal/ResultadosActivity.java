@@ -3,11 +3,13 @@ package com.itcg.help2meal;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.backends.okhttp3.OkHttpImagePipelineConfigFactory;
@@ -52,11 +54,13 @@ public class ResultadosActivity extends AppCompatActivity {
                 .build();
         Fresco.initialize(this,config);
 
-        loadResults();
+        String tipo_recomendacion = getIntent().getStringExtra("type_recipe");
+
+        loadResults(tipo_recomendacion);
 
     }
 
-    private void loadResults(){
+    private void loadResults(String tipo_recomendacion){
         final Activity context = ResultadosActivity.this;
 
         OkHttpClient httpClient = new OkHttpClient();
@@ -69,6 +73,7 @@ public class ResultadosActivity extends AppCompatActivity {
 
         RequestBody formBody = new FormBody.Builder()
                 .add("user_token", token_user)
+                .add("tipo_recomendacion", tipo_recomendacion)
                 .build();
 
 
@@ -135,7 +140,9 @@ public class ResultadosActivity extends AppCompatActivity {
         gv_results.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent(getApplicationContext(), RecetaActivity.class);
+                intent.putExtra("id_recipe", ""+adapter.getItem(position).getId());
+                startActivity(intent);
             }
         });
     }

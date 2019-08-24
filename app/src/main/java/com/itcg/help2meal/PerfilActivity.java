@@ -11,6 +11,7 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.hawk.Hawk;
+import com.tapadoo.alerter.Alerter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,11 +82,25 @@ public class PerfilActivity extends AppCompatActivity {
                 Log.e(vars.TAG, e.getMessage());
                 progressdialog.dismiss();
                 // error
+                Alerter.create(PerfilActivity.this)
+                        .setTitle("Ocurrio un error")
+                        .setText(""+e.getMessage())
+                        .setIcon(R.drawable.alerter_ic_notifications)
+                        .setBackgroundColorRes(R.color.colorErrorMaterial)
+                        .enableSwipeToDismiss()
+                        .show();
             }
 
             @Override
             public void onResponse(Call call, Response response) {
                 progressdialog.dismiss();
+                Alerter.create(PerfilActivity.this)
+                        .setTitle("Perfil actualizado")
+                        .setText("")
+                        .setIcon(R.drawable.icon_check)
+                        .setBackgroundColorRes(R.color.colorAqua)
+                        .enableSwipeToDismiss()
+                        .show();
 
             }
         });

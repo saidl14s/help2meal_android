@@ -14,8 +14,10 @@ import android.widget.GridView;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -44,6 +46,13 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
     ProgressDialog progressdialog;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(vars.TAG, "resume");
+        loadIngredientsDB();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
@@ -57,12 +66,12 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
         progressdialog.setTitle("Recuperando lista de ingredientes...");
         progressdialog.show();
 
-        OkHttpClient httpClient = new OkHttpClient();
+
         OkHttpClient httpClientClasificacion = new OkHttpClient();
         lv_ingredientes = (GridView) findViewById(R.id.gv_ingredientes);
         gv_categories = (GridView) findViewById(R.id.gv_categories);
 
-        dataIngredientes = new ArrayList<>();
+
         dataCategoria = new ArrayList<>();
 
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -85,10 +94,101 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
         });
 
 
+        loadIngredientsDB();
 
-        String url = vars.URL_SERVER +"api/auth/ingredientes";
-        String urlClasificacion = vars.URL_SERVER +"api/auth/clasificaciones";
+
+
+        String urlClasificacion = vars.URL_SERVER +"api/auth/clasificaciones-ingredientes";
         String token_user = Hawk.get("access_token");
+
+        Request requestClasificaciones = new Request.Builder()
+                .url(urlClasificacion)
+                .addHeader("Content-Type","application/x-www-form-urlencoded")
+                .addHeader("X-Requested-With","XMLHttpRequest")
+                .addHeader("Authorization" , "Bearer " + token_user)
+                .build();
+
+        httpClientClasificacion.newCall(requestClasificaciones).enqueue(new Callback() {
+            @Override public void onFailure(Call call, IOException e) {
+                Log.e(vars.TAG, e.getMessage());
+                // error
+            }
+
+            @Override public void onResponse(Call call, Response response) {
+                Log.i(vars.TAG, response.message()+" "+response.body().toString() );
+
+                try {
+                    x = response.body().string();
+                    if(response.isSuccessful()){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try{
+                                    Gson gson = new Gson();
+
+                                    Categoria[] mcArray = gson.fromJson(x, Categoria[].class);
+                                    List<Categoria> prepareListClasificacion = Arrays.asList(mcArray);
+                                    dataCategoria= new ArrayList<>();
+
+                                    for (Categoria categoria : prepareListClasificacion) {
+                                        dataCategoria.add(
+                                                new Categoria(
+                                                        categoria.getId(),
+                                                        categoria.getNombre()
+
+                                                )
+                                        );
+                                    }
+                                    adapterCategoria = new CategoriaAdapter(context, dataCategoria, AlacenaActivity.this );
+                                    gv_categories.setAdapter(adapterCategoria);
+
+                                }catch (Exception e){
+
+                                }
+
+                            }
+                        });
+
+                    } else {
+                        //Log.e(vars.TAG, response.message()+" "+response.body().toString() );
+                    }
+                }catch (Exception e){
+
+                }
+
+            }
+        });
+
+
+        btn_save_ingredientes = (Button) findViewById(R.id.btn_save_ingredientes);
+        btn_save_ingredientes.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String url = vars.URL_SERVER +"api/auth/user-ingredientes-save";
+                String token_user = Hawk.get("access_token");
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .addHeader("Content-Type","application/x-www-form-urlencoded")
+                        .addHeader("X-Requested-With","XMLHttpRequest")
+                        .addHeader("Authorization" , "Bearer " + token_user)
+                        .build();
+                uploadInventario();
+                Alerter.create(AlacenaActivity.this)
+                        .setTitle("Almacenado correctamente")
+                        .setText("")
+                        .setIcon(R.drawable.icon_check)
+                        .setBackgroundColorRes(R.color.colorAqua)
+                        .enableSwipeToDismiss()
+                        .show();
+            }
+        });
+    }
+
+    public void loadIngredientsDB(){
+        String url = vars.URL_SERVER +"api/auth/ingredientes-get";
+        OkHttpClient httpClient = new OkHttpClient();
+        String token_user = Hawk.get("access_token");
+        dataIngredientes = new ArrayList<>();
 
         Request request = new Request.Builder()
                 .url(url)
@@ -129,11 +229,11 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                                                         ingrediente.getCaducidad(),
                                                         ingrediente.getClasificacion_id(),
                                                         ingrediente.getUrl_imagen(),
-                                                        0
+                                                        ingrediente.getCantidad()
                                                 )
                                         );
                                     }
-                                    adapter = new IngredienteAdapter(context, dataIngredientes);
+                                    adapter = new IngredienteAdapter(AlacenaActivity.this, dataIngredientes);
                                     lv_ingredientes.setAdapter(adapter);
                                     progressdialog.dismiss();
                                 }catch (Exception e){
@@ -152,92 +252,56 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
 
             }
         });
+    }
+
+    public void uploadInventario(){
+        /*progressdialog = new ProgressDialog(this);
+        progressdialog.setCancelable(true); //change to false
+        progressdialog.setTitle("Guardando información...");
+        progressdialog.show();*/
+
+        OkHttpClient httpClient = new OkHttpClient();
+
+        String url = vars.URL_SERVER +"api/auth/user-ingredientes-save";
+        String token_user = Hawk.get("access_token");
 
 
-
-        Request requestClasificaciones = new Request.Builder()
-                .url(urlClasificacion)
-                .addHeader("Content-Type","application/x-www-form-urlencoded")
-                .addHeader("X-Requested-With","XMLHttpRequest")
-                .addHeader("Authorization" , "Bearer " + token_user)
-                .build();
-
-        httpClientClasificacion.newCall(requestClasificaciones).enqueue(new Callback() {
-            @Override public void onFailure(Call call, IOException e) {
-                Log.e(vars.TAG, e.getMessage());
-                // error
-            }
-
-            @Override public void onResponse(Call call, Response response) {
-                Log.i(vars.TAG, response.message()+" "+response.body().toString() );
-
-                try {
-                    x = response.body().string();
-                    if(response.isSuccessful()){
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try{
-                                    Gson gson = new Gson();
-
-                                    Categoria[] mcArray = gson.fromJson(x, Categoria[].class);
-                                    List<Categoria> prepareListClasificacion = Arrays.asList(mcArray);
-                                    dataCategoria= new ArrayList<>();
-
-                                    for (Categoria categoria : prepareListClasificacion) {
-                                        dataCategoria.add(
-                                                new Categoria(
-                                                        categoria.getId(),
-                                                        categoria.getNombre()
-                                                )
-                                        );
-                                    }
-                                    adapterCategoria = new CategoriaAdapter(context, dataCategoria, AlacenaActivity.this );
-                                    gv_categories.setAdapter(adapterCategoria);
-
-                                }catch (Exception e){
-
-                                }
-
-                            }
-                        });
-
-                    } else {
-                        //Log.e(vars.TAG, response.message()+" "+response.body().toString() );
-                    }
-                }catch (Exception e){
-
-                }
-
-            }
-        });
-
-
-        btn_save_ingredientes = (Button) findViewById(R.id.btn_save_ingredientes);
-        btn_save_ingredientes.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String url = vars.URL_SERVER +"api/auth/user-ingredientes-save";
-                String token_user = Hawk.get("access_token");
-
+        for(int x = 0; x < dataIngredientes.size(); x++) {
+            Log.e("Gelp2mEAL",dataIngredientes.get(x).getNombre() +" "+dataIngredientes.get(x).getId() + " "+dataIngredientes.get(x).getCantidad());
+            if(dataIngredientes.get(x).getCantidad() > 0){
+                RequestBody formBody = new FormBody.Builder()
+                        .add("ingrediente_id", ""+dataIngredientes.get(x).getId())
+                        .add("cantidad", ""+dataIngredientes.get(x).getCantidad())
+                        .build();
                 Request request = new Request.Builder()
                         .url(url)
                         .addHeader("Content-Type","application/x-www-form-urlencoded")
                         .addHeader("X-Requested-With","XMLHttpRequest")
                         .addHeader("Authorization" , "Bearer " + token_user)
+                        .post(formBody)
                         .build();
-                uploadInventario();
-                Intent intent = new Intent(AlacenaActivity.this, HomeTabActivity.class);
-                startActivity(intent);
-                finish();
+                httpClient.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Log.e(vars.TAG, e.getMessage());
+
+                        // error
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) {
+
+
+                    }
+                });
             }
-        });
+        }
+
+
+
+
     }
 
-    public void uploadInventario(){
-        for(int x=0;x <dataIngredientes.size() ;x++) {
-            Log.e("Gelp2mEAL",dataIngredientes.get(x).getNombre() +" "+dataIngredientes.get(x).getId() + " "+dataIngredientes.get(x).getCantidad());
-        }
-    }
 
 
 
@@ -245,6 +309,7 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
         Intent intent = new Intent(AlacenaActivity.this, IngredientePersonalizadoActivity.class);
         startActivity(intent);
     }
+
 
 
     @Override
@@ -271,7 +336,7 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                                         ingrediente.getCaducidad(),
                                         ingrediente.getClasificacion_id(),
                                         ingrediente.getUrl_imagen(),
-                                        0
+                                        ingrediente.getCantidad()
                                 )
                         );
                     }

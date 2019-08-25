@@ -3,6 +3,7 @@ package com.itcg.help2meal;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +11,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.androidstudy.networkmanager.Monitor;
+import com.androidstudy.networkmanager.Tovuti;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.backends.okhttp3.OkHttpImagePipelineConfigFactory;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.google.gson.Gson;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.hawk.Hawk;
+import com.tapadoo.alerter.Alerter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +41,8 @@ public class HistorialActivity extends AppCompatActivity {
     String responseData;
     ArrayList<ResultRecipe> dataResultRecipes;
     private static ResultRecipesAdapter adapter;
+    ProgressDialog progressdialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +52,39 @@ public class HistorialActivity extends AppCompatActivity {
 
         StatusBarUtil.setLightMode(this);
 
-        //gv_recipe_result
-        OkHttpClient okHttpClient = new OkHttpClient();
-        final ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
-                .newBuilder(this, okHttpClient)
-                .build();
-        Fresco.initialize(this,config);
+        Tovuti.from(getApplicationContext()).monitor(new Monitor.ConnectivityListener(){
+            @Override
+            public void onConnectivityChanged(int connectionType, boolean isConnected, boolean isFast){
+                // TODO: Handle the connection...
+                if(isConnected){
 
-        loadResults();
+
+                    progressdialog = new ProgressDialog(HistorialActivity.this);
+                    progressdialog.setCancelable(false);
+                    progressdialog.setTitle("Cargando tus recetas...");
+                    progressdialog.show();
+
+                    //gv_recipe_result
+                    OkHttpClient okHttpClient = new OkHttpClient();
+                    final ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
+                            .newBuilder(getApplicationContext(), okHttpClient)
+                            .build();
+                    Fresco.initialize(getApplicationContext(),config);
+
+                    loadResults();
+
+                }else{
+                    Alerter.create(HistorialActivity.this)
+                            .setTitle("Vaya!")
+                            .setText("Tenemos un problema con tu conexión a Internet.")
+                            .setIcon(R.drawable.alerter_ic_notifications)
+                            .setBackgroundColorRes(R.color.colorErrorMaterial)
+                            .enableSwipeToDismiss()
+                            .show();
+                }
+            }
+        });
+
 
     }
 
@@ -113,6 +144,7 @@ public class HistorialActivity extends AppCompatActivity {
                                         );
                                     }
                                     adapter = new ResultRecipesAdapter(context, dataResultRecipes);
+                                    progressdialog.dismiss();
                                     gv_results.setAdapter(adapter);
                                     //progressdialog.dismiss();
                                 }catch (Exception e){

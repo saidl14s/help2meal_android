@@ -18,6 +18,7 @@
     <color name="colorVerdeDisabled">#8000BA40</color>
     <color name="colorAzulDisabled">#803497FD</color>
     <color name="colorTextInputHintDisabled">#80535353</color>
+    <color name="white">#fff</color>
 
 
 </resources>

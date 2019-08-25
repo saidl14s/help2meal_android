@@ -1,5 +1,6 @@
 package com.itcg.help2meal;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -8,6 +9,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
+import com.android.billingclient.api.SkuDetailsResponseListener;
+import com.androidstudy.networkmanager.Monitor;
+import com.androidstudy.networkmanager.Tovuti;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.backends.okhttp3.OkHttpImagePipelineConfigFactory;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.google.gson.Gson;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.hawk.Hawk;
@@ -26,13 +40,17 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class PerfilActivity extends AppCompatActivity {
+public class PerfilActivity extends AppCompatActivity implements PurchasesUpdatedListener, SkuDetailsResponseListener {
 
     public Vars vars = new Vars();
     String dataReceived = "";
     ProgressDialog progressdialog;
 
-    EditText et_name, et_mail, et_password;
+    EditText et_name, et_mail, et_password,et_suscripcion;
+
+    BillingClient mBillingClient;
+    String licenceName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getSupportActionBar().hide();
@@ -40,16 +58,37 @@ public class PerfilActivity extends AppCompatActivity {
         setContentView(R.layout.activity_perfil);
         StatusBarUtil.setColor(this,  getColor(R.color.colorVerde),0);
 
-        progressdialog = new ProgressDialog(this);
-        progressdialog.setCancelable(false);
-        progressdialog.setTitle("Recuperando toda tú información...");
-        progressdialog.show();
+        Tovuti.from(getApplicationContext()).monitor(new Monitor.ConnectivityListener(){
+            @Override
+            public void onConnectivityChanged(int connectionType, boolean isConnected, boolean isFast){
+                // TODO: Handle the connection...
+                if(isConnected){
+                    progressdialog = new ProgressDialog(PerfilActivity.this);
+                    progressdialog.setCancelable(false);
+                    progressdialog.setTitle("Recuperando toda tú información...");
+                    progressdialog.show();
 
-        et_name = (EditText) findViewById(R.id.et_name_user);
-        et_mail = (EditText) findViewById(R.id.et_email_user);
-        et_password = (EditText) findViewById(R.id.et_password_user);
+                    et_name = (EditText) findViewById(R.id.et_name_user);
+                    et_mail = (EditText) findViewById(R.id.et_email_user);
+                    et_password = (EditText) findViewById(R.id.et_password_user);
+                    et_suscripcion = (EditText) findViewById(R.id.et_suscripcion);
 
-        loadUserData();
+
+                    loadUserData();
+
+                }else{
+                    Alerter.create(PerfilActivity.this)
+                            .setTitle("Vaya!")
+                            .setText("Tenemos un problema con tu conexión a Internet.")
+                            .setIcon(R.drawable.alerter_ic_notifications)
+                            .setBackgroundColorRes(R.color.colorErrorMaterial)
+                            .enableSwipeToDismiss()
+                            .show();
+                }
+            }
+        });
+
+
     }
 
     public void updateUserData(View view){
@@ -107,11 +146,46 @@ public class PerfilActivity extends AppCompatActivity {
 
     }
 
+    public boolean connectPlayStore(){
+
+        mBillingClient = BillingClient.newBuilder(this).enablePendingPurchases().setListener(this).build();
+
+        mBillingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    // The BillingClient is ready. You can query purchases here.
+
+                    Log.e(vars.TAG, "onBillingSetupFinished: " );
+                    getShoppingHistory();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                Log.e(vars.TAG, "onBillingServiceDisconnected: " );
+            }
+        });
+        return true;
+    }
+
+    private void getShoppingHistory(){
+        List<String> skuList = new ArrayList<>();
+        skuList.add(vars.SKU_MONTHLY);
+        skuList.add(vars.SKU_YEARLY);
+        SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+        params.setSkusList(skuList).setType(BillingClient.SkuType.SUBS);
+        mBillingClient.querySkuDetailsAsync(params.build(),this);
+    }
+
+
     public void checkLicence(View view){
         progressdialog = new ProgressDialog(this);
         progressdialog.setCancelable(true); //change to false
         progressdialog.setTitle("Validando licencia, espere un momento por favor...");
         progressdialog.show();
+        connectPlayStore();
+
     }
 
     public void loadUserData(){
@@ -148,7 +222,7 @@ public class PerfilActivity extends AppCompatActivity {
                                     progressdialog.dismiss();
                                     et_name.setText(userData.getName());
                                     et_mail.setText(userData.getEmail());
-                                    et_password.setText(userData.getPassword());
+                                    //et_password.setText(userData.getPassword());
 
                                     Log.e(vars.TAG, dataReceived);
                                 }catch (Exception e){
@@ -167,5 +241,29 @@ public class PerfilActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> skuDetailsList) {
+        Log.e(vars.TAG, "" + billingResult.getDebugMessage()+" "+ billingResult.getResponseCode()+" SKUDETAILSCODE");
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK || billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED  ) {
+            for (SkuDetails skuDetails : skuDetailsList) {
+                String sku = skuDetails.getSku();
+                String title = skuDetails.getTitle();
+                if (vars.SKU_YEARLY.equals(sku) || vars.SKU_MONTHLY.equals(sku)) {
+                    licenceName = title;
+                    et_suscripcion.setHint(title);
+                    progressdialog.hide();
+                    break;
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public void onPurchasesUpdated(BillingResult billingResult, @Nullable List<Purchase> purchases) {
+        Log.e("Help2meal"," onPurchasesUpdated  : "+billingResult.getResponseCode()+billingResult.getDebugMessage() );
+
     }
 }

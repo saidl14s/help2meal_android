@@ -3,6 +3,7 @@ package com.itcg.help2meal;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,12 +12,15 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.androidstudy.networkmanager.Monitor;
+import com.androidstudy.networkmanager.Tovuti;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.backends.okhttp3.OkHttpImagePipelineConfigFactory;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.google.gson.Gson;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.hawk.Hawk;
+import com.tapadoo.alerter.Alerter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,25 +42,47 @@ public class ResultadosActivity extends AppCompatActivity {
     String responseData;
     ArrayList<ResultRecipe> dataResultRecipes;
     private static ResultRecipesAdapter adapter;
+    ProgressDialog progressdialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_resultados);
-
         StatusBarUtil.setLightMode(this);
 
         //gv_recipe_result
-        OkHttpClient okHttpClient = new OkHttpClient();
-        final ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
-                .newBuilder(this, okHttpClient)
-                .build();
-        Fresco.initialize(this,config);
+        Tovuti.from(getApplicationContext()).monitor(new Monitor.ConnectivityListener(){
+            @Override
+            public void onConnectivityChanged(int connectionType, boolean isConnected, boolean isFast){
+                // TODO: Handle the connection...
+                if(isConnected){
+                    progressdialog = new ProgressDialog(ResultadosActivity.this);
+                    progressdialog.setCancelable(false);
+                    progressdialog.setTitle("Armando tus recetas...");
+                    progressdialog.show();
 
-        String tipo_recomendacion = getIntent().getStringExtra("type_recipe");
+                    OkHttpClient okHttpClient = new OkHttpClient();
+                    final ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
+                            .newBuilder(getApplicationContext(), okHttpClient)
+                            .build();
+                    Fresco.initialize(getApplicationContext(),config);
 
-        loadResults(tipo_recomendacion);
+                    String tipo_recomendacion = getIntent().getStringExtra("type_recipe");
+
+                    loadResults(tipo_recomendacion);
+                }else{
+                    Alerter.create(ResultadosActivity.this)
+                            .setTitle("Vaya!")
+                            .setText("Tenemos un problema con tu conexión a Internet.")
+                            .setIcon(R.drawable.alerter_ic_notifications)
+                            .setBackgroundColorRes(R.color.colorErrorMaterial)
+                            .enableSwipeToDismiss()
+                            .show();
+                }
+            }
+        });
+
 
     }
 
@@ -118,6 +144,7 @@ public class ResultadosActivity extends AppCompatActivity {
                                     }
                                     adapter = new ResultRecipesAdapter(context, dataResultRecipes);
                                     gv_results.setAdapter(adapter);
+                                    progressdialog.dismiss();
                                     //progressdialog.dismiss();
                                 }catch (Exception e){
                                     Log.e(vars.TAG, e.getMessage());

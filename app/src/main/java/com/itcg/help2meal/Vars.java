@@ -3,9 +3,11 @@ package com.itcg.help2meal;
 public class Vars {
     public Vars(){ }
 
-    final String URL_SERVER = "http://e420224d.ngrok.io/";
+    final String URL_SERVER = "https://helpmeal-api.herokuapp.com/";
     final String TAG = "Help2Meal_Log";
-    final boolean DEBUG = true;
+    final boolean DEBUG = false;
+    final boolean TOKEN_FAKE_ENABLE = false;
+
     final String TOKEN_FAKE ="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjcyODgxNjRmNDZhZWZmY2M5YmNiMjc3Zjk2ZWRlMmVlNWEzNzllNTBiMGYyZjY3MTkwYjllMjAwNzExMTRiOTc5ZTdiYTIyZTg2ZmE4MTI4In0.eyJhdWQiOiIxIiwianRpIjoiNzI4ODE2NGY0NmFlZmZjYzliY2IyNzdmOTZlZGUyZWU1YTM3OWU1MGIwZjJmNjcxOTBiOWUyMDA3MTExNGI5NzllN2JhMjJlODZmYTgxMjgiLCJpYXQiOjE1NjY1Mjk4OTUsIm5iZiI6MTU2NjUyOTg5NSwiZXhwIjoxNTk4MTUyMjk1LCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.jIPj0l_5Rl37zlV3YEBGF_AoXsCOtWP1i_AMhFqJtFzqntsSQUlr8ToT4RvZodQFP2mL_2prrfm0UwnOucL6LAG95j-wCQRiEXlb_E4fJW4eWLA2o0RZi7mv4vk5p01_rjxpD6wXMzxcIwY0XLW4m20BTVG7DjCs4Ves_jehZFYzFrwDu2qj8kT8ussKoYFg7wBVTGNqrMeqW4s0woL0EduN6hTMMMzImv5mNmMPh7rXiVSTLTNj_AXLfRDVnWeSxk0vIRAlQ0Dt0UiP2ZUmdphAGTJ-eh-U56n3B61AcyVOPOLwu6-6Z6PwziV1TOuW4mFXPwWvf0g_8GQx-BMKSgFZlBTR1fW7xDPsl7KapWkIjBieQEe53redVAbUmWcx7BLjwc0MG9Ibz3ndrZ_lkcPug0kdAyAA8MKgwVQIqEJayd3FcGup_LzSIdVvt2ustZXjQTnEHShfn31Xdm2ykOQ9Y5lHGBinPvYCI-6eEur5p9lhMq4mSfu50bKcvp7d2MzPoDarFaer9VMFURG1wdN1EwI20mHYShU1-fSv4-N064z6r8qeyqkXKdnen5z0GnfWIeG7t4hvtHXohB6L3_UbRKX6LTgZ-ZiJaRX_A5UhrCZ2lF-I9GmC7P9eDqTpyQbCkNV4ztsuWgT6YHuML0LXZ5rndFosLfnWqCDy8kI";
 
     // For suscription

@@ -93,7 +93,7 @@
             android:drawablePadding="12dp"
             android:ems="10"
             android:fontFamily="@font/montserrat_regular"
-            android:hint="@string/pass_hint"
+            android:hint="Dejar vacío para conservar anterior contraseña"
             android:inputType="textPassword"
             android:textColor="#535353" />
 

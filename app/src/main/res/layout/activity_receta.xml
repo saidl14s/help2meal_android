@@ -7,11 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".RecetaActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -130,10 +126,12 @@
         <GridView
             android:id="@+id/gv_ingredients_recipe_suggest"
             android:layout_width="match_parent"
-            android:layout_height="520dp"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="true"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
+            android:verticalSpacing="10dp"
             android:numColumns="2" />
 
         <TextView
@@ -171,7 +169,11 @@
             android:layout_marginStart="0dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="0dp"
+            android:layout_marginBottom="100dp"
             android:text="¡Cocinar Ahora!" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"></LinearLayout>
 
 
     </LinearLayout>

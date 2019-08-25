@@ -9,11 +9,14 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.androidstudy.networkmanager.Monitor;
+import com.androidstudy.networkmanager.Tovuti;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.backends.okhttp3.OkHttpImagePipelineConfigFactory;
@@ -21,6 +24,7 @@ import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.google.gson.Gson;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.hawk.Hawk;
+import com.tapadoo.alerter.Alerter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -83,7 +87,7 @@ public class RecetaActivity extends AppCompatActivity {
             loadRecipeData(""+id_recipe);
             loadIngredients(""+id_recipe);
 
-            progressdialog = new ProgressDialog(this);
+            progressdialog = new ProgressDialog(RecetaActivity.this);
             progressdialog.setCancelable(false);
             progressdialog.setTitle("Cargando receta...");
             progressdialog.show();
@@ -96,45 +100,88 @@ public class RecetaActivity extends AppCompatActivity {
 
 
     }
+    public void setGridViewHeightBasedOnChildren(GridView gridView, IngredienteSuggestAdapter adapterView, int columnas) {
+
+        try {
+
+            int alturaTotal = 0;
+            int items = adapterView.getCount();
+            int filas = 0;
+
+            View listItem = adapterView.getView(0, null, gridView);
+            listItem.measure(0, 0);
+            alturaTotal = listItem.getMeasuredHeight();
+
+            float x = 1;
+
+            if (items > columnas) {
+                x = items / columnas;
+                filas = (int) (x + 1);
+                alturaTotal *= filas;
+            }
+
+            ViewGroup.LayoutParams params = gridView.getLayoutParams();
+            params.height = alturaTotal+75;
+            gridView.setLayoutParams(params);
+
+        } catch (IndexOutOfBoundsException e){}
+    }
+
 
     public void cocinarNow(View view){
-        tv_instructions.setVisibility(View.VISIBLE);
-        btn_cocinar_now.setVisibility(View.GONE);
-        tv_instructions_title.setVisibility(View.VISIBLE);
-        String url = vars.URL_SERVER +"api/auth/ingredientes-user-update";
-        OkHttpClient httpClient = new OkHttpClient();
-        String token_user = Hawk.get("access_token");
+        Tovuti.from(getApplicationContext()).monitor(new Monitor.ConnectivityListener(){
+            @Override
+            public void onConnectivityChanged(int connectionType, boolean isConnected, boolean isFast) {
+                // TODO: Handle the connection...
+                if (isConnected) {
+                    tv_instructions.setVisibility(View.VISIBLE);
+                    btn_cocinar_now.setVisibility(View.GONE);
+                    tv_instructions_title.setVisibility(View.VISIBLE);
+                    String url = vars.URL_SERVER +"api/auth/ingredientes-user-update";
+                    OkHttpClient httpClient = new OkHttpClient();
+                    String token_user = Hawk.get("access_token");
 
-        for(int x = 0; x < dataIngredientes.size(); x++) {
-            Log.e("Gelp2mEAL",dataIngredientes.get(x).getNombre() +" "+dataIngredientes.get(x).getId() + " "+dataIngredientes.get(x).getCantidad());
+                    for(int x = 0; x < dataIngredientes.size(); x++) {
+                        Log.e("Gelp2mEAL",dataIngredientes.get(x).getNombre() +" "+dataIngredientes.get(x).getId() + " "+dataIngredientes.get(x).getCantidad());
 
-            RequestBody formBody = new FormBody.Builder()
-                    .add("ingrediente_id", ""+dataIngredientes.get(x).getId())
-                    .add("cantidad", ""+dataIngredientes.get(x).getCantidad())
-                    .add("platillo_id", id_recipe)
-                    .build();
-            Request request = new Request.Builder()
-                    .url(url)
-                    .addHeader("Content-Type","application/x-www-form-urlencoded")
-                    .addHeader("X-Requested-With","XMLHttpRequest")
-                    .addHeader("Authorization" , "Bearer " + token_user)
-                    .post(formBody)
-                    .build();
-            httpClient.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    Log.e(vars.TAG, e.getMessage());
+                        RequestBody formBody = new FormBody.Builder()
+                                .add("ingrediente_id", ""+dataIngredientes.get(x).getId())
+                                .add("cantidad", ""+dataIngredientes.get(x).getCantidad())
+                                .add("platillo_id", id_recipe)
+                                .build();
+                        Request request = new Request.Builder()
+                                 .url(url)
+                                .addHeader("Content-Type","application/x-www-form-urlencoded")
+                                .addHeader("X-Requested-With","XMLHttpRequest")
+                                .addHeader("Authorization" , "Bearer " + token_user)
+                                .post(formBody)
+                                .build();
+                        httpClient.newCall(request).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                Log.e(vars.TAG, e.getMessage());
 
-                    // error
+                                // error
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) {
+
+
+                            }
+                        });
+                    }
+                } else {
+                    Alerter.create(RecetaActivity.this)
+                            .setTitle("Vaya!")
+                            .setText("Parece que no tienes conexión a Internet. Conéctate para cocinar este platillo.")
+                            .setBackgroundColorRes(R.color.colorErrorMaterial)
+                            .show();
                 }
+            }
+        });
 
-                @Override
-                public void onResponse(Call call, Response response) {
 
-
-                }
-            });
-        }
     }
 
     public void loadRecipeData(String id){
@@ -253,6 +300,7 @@ public class RecetaActivity extends AppCompatActivity {
                                         );
                                     }
                                     adapterIngredient = new IngredienteSuggestAdapter(RecetaActivity.this, dataIngredientes);
+                                    setGridViewHeightBasedOnChildren(gv_ingredients_recipe_suggest,adapterIngredient,2);
                                     gv_ingredients_recipe_suggest.setAdapter(adapterIngredient);
 
                                     Log.e(vars.TAG, dataIngredients);

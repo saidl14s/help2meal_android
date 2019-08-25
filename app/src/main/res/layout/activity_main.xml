@@ -250,7 +250,7 @@
 
         <Button
             android:id="@+id/btn_activate_signup"
-            style="@style/btn_blue_light"
+            style="@style/btn_blue_borderer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

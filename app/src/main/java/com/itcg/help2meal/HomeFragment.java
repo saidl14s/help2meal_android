@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +35,7 @@ import okhttp3.Response;
 
 import com.androidstudy.networkmanager.Monitor;
 import com.androidstudy.networkmanager.Tovuti;
+import com.tapadoo.alerter.Alerter;
 
 
 /**
@@ -61,9 +61,16 @@ public class HomeFragment extends Fragment {
             public void onConnectivityChanged(int connectionType, boolean isConnected, boolean isFast){
                 // TODO: Handle the connection...
                 if(isConnected){
-
                     loadLastRecipes();
                     loadNewRecipes();
+                }else{
+                    Alerter.create(getActivity())
+                            .setTitle("Vaya!")
+                            .setText("Tenemos un problema con tu conexión a Internet.")
+                            .setIcon(R.drawable.alerter_ic_notifications)
+                            .setBackgroundColorRes(R.color.colorErrorMaterial)
+                            .enableSwipeToDismiss()
+                            .show();
                 }
             }
         });
@@ -215,6 +222,8 @@ public class HomeFragment extends Fragment {
                                         );
                                     }
                                     adapter = new LastRecipesAdapter(getActivity(), dataLastRecipes);
+                                    setGridViewHeightBasedOnChildren(gv_last,adapter,2);
+                                    ///HERE
                                     gv_last.setAdapter(adapter);
                                     //progressdialog.dismiss();
                                 }catch (Exception e){
@@ -246,6 +255,32 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    public void setGridViewHeightBasedOnChildren(GridView gridView, LastRecipesAdapter adapterView, int columnas) {
+
+        try {
+
+            int alturaTotal = 0;
+            int items = adapterView.getCount();
+            int filas = 0;
+
+            View listItem = adapterView.getView(0, null, gridView);
+            listItem.measure(0, 0);
+            alturaTotal = listItem.getMeasuredHeight();
+
+            float x = 1;
+
+            if (items > columnas) {
+                x = items / columnas;
+                filas = (int) (x + 1);
+                alturaTotal *= filas;
+            }
+
+            ViewGroup.LayoutParams params = gridView.getLayoutParams();
+            params.height = alturaTotal+5;
+            gridView.setLayoutParams(params);
+
+        } catch (IndexOutOfBoundsException e){}
+    }
 
 
 

@@ -6,10 +6,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.androidstudy.networkmanager.Monitor;
+import com.androidstudy.networkmanager.Tovuti;
 import com.google.gson.Gson;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.hawk.Hawk;
@@ -45,12 +48,35 @@ public class GustosActivity extends AppCompatActivity {
 
         StatusBarUtil.setLightMode(this);
 
-        loadEnfermedades();
-        loadGustos();
+        Tovuti.from(getApplicationContext()).monitor(new Monitor.ConnectivityListener(){
+
+            @Override
+            public void onConnectivityChanged(int connectionType, boolean isConnected, boolean isFast){
+                // TODO: Handle the connection...
+                if(isConnected){
+                    Log.e(vars.TAG,"connected");
+                    loadEnfermedades();
+                    loadGustos();
+
+                }else{
+                    Alerter.create(GustosActivity.this)
+                            .setTitle("Vaya!")
+                            .setText("Tenemos un problema con tu conexión a Internet.")
+                            .setIcon(R.drawable.alerter_ic_notifications)
+                            .setBackgroundColorRes(R.color.colorErrorMaterial)
+                            .enableSwipeToDismiss()
+                            .show();
+                }
+            }
+        });
+
+
 
     }
 
     private void loadEnfermedades(){
+
+        Log.e(vars.TAG,"loadgin enfermedades");
 
         OkHttpClient httpClient = new OkHttpClient();
 
@@ -75,12 +101,13 @@ public class GustosActivity extends AppCompatActivity {
 
         httpClient.newCall(request).enqueue(new Callback() {
             @Override public void onFailure(Call call, IOException e) {
-                Log.e(vars.TAG, e.getMessage());
+                //Log.e(vars.TAG, e.getMessage());
+                Log.e(vars.TAG,"error en enfermedades "+e.getMessage());
                 // error
             }
 
             @Override public void onResponse(Call call, Response response) {
-                Log.i(vars.TAG, response.message()+" "+response.body().toString() );
+                Log.e(vars.TAG, response.message()+" "+response.body().toString() );
                 try{
                     responseData = response.body().string();
                     if(response.isSuccessful()){
@@ -105,6 +132,7 @@ public class GustosActivity extends AppCompatActivity {
                                         );
                                     }
                                     adapter = new EnfermedadAdapter(context, dataEnfermedades);
+                                    setGridViewHeightBasedOnChildren(gv_enfermedades,adapter,1);
                                     gv_enfermedades.setAdapter(adapter);
                                     //progressdialog.dismiss();
                                 }catch (Exception e){
@@ -188,6 +216,7 @@ public class GustosActivity extends AppCompatActivity {
                                         );
                                     }
                                     adapterGusto = new EnfermedadAdapter(context, dataGusto);
+                                    setGridViewHeightBasedOnChildren(gv_gustos, adapterGusto, 1);
                                     gv_gustos.setAdapter(adapterGusto);
                                     //progressdialog.dismiss();
                                 }catch (Exception e){
@@ -215,6 +244,33 @@ public class GustosActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), position+" "+adapterGusto.getItem(position).getNombre()+" " +adapterGusto.getItem(position).getId(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void setGridViewHeightBasedOnChildren(GridView gridView, EnfermedadAdapter adapterView, int columnas) {
+
+        try {
+
+            int alturaTotal = 0;
+            int items = adapterView.getCount();
+            int filas = 0;
+
+            View listItem = adapterView.getView(0, null, gridView);
+            listItem.measure(0, 0);
+            alturaTotal = listItem.getMeasuredHeight();
+
+            float x = 1;
+
+            if (items > columnas) {
+                x = items / columnas;
+                filas = (int) (x + 1);
+                alturaTotal *= filas;
+            }
+
+            ViewGroup.LayoutParams params = gridView.getLayoutParams();
+            params.height = alturaTotal+5;
+            gridView.setLayoutParams(params);
+
+        } catch (IndexOutOfBoundsException e){}
     }
 
 

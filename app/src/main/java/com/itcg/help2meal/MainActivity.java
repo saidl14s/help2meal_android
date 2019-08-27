@@ -18,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.paris.Paris;
 import com.android.billingclient.api.BillingClient;
@@ -27,7 +26,6 @@ import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.PurchaseHistoryResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
@@ -94,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
             public void onConnectivityChanged(int connectionType, boolean isConnected, boolean isFast) {
                 // TODO: Handle the connection...
                 if (isConnected) {
+                    Hawk.init(getApplicationContext()).build();
                     progressdialog = new ProgressDialog(MainActivity.this);
                     progressdialog.setCancelable(false);
                     progressdialog.setTitle("Comprobando licencia, espera por favor ...");
@@ -126,13 +125,24 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
                     // The BillingClient is ready. You can query purchases here.
 
                     Log.e(vars.TAG, "onBillingSetupFinished: " );
-                    getShoppingHistory();
+                    //getShoppingHistory();
+                    getPurchase();
+                }else{
+                    validLicense = false;
+                    progressdialog.dismiss();
+                    Alerter.create(MainActivity.this)
+                            .setTitle("Vaya!")
+                            .setText("Parece que tenemos un problema de comunicación con Play Store. Asegúrate de tener tú software actualizado. ")
+                            .setBackgroundColorRes(R.color.colorErrorMaterial)
+                            .show();
                 }
+
             }
 
             @Override
             public void onBillingServiceDisconnected() {
                     Log.e(vars.TAG, "onBillingServiceDisconnected: " );
+
             }
         });
         return true;
@@ -239,25 +249,77 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
         builderSingle.show();
     }
 
-    private void getShoppingHistory(){
-        List<String> skuList = new ArrayList<>();
-        skuList.add(vars.SKU_MONTHLY);
-        skuList.add(vars.SKU_YEARLY);
-        SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
-        params.setSkusList(skuList).setType(SkuType.SUBS);
-        mBillingClient.querySkuDetailsAsync(params.build(),this);
-    }
 
     public void initConfiguration(){
-        Hawk.init(getApplicationContext()).build();
-        progressdialog.hide();
         //connectPlayStore();
         if(Hawk.contains("access_token")){
             if(validLicense){
-                Intent intent = new Intent(MainActivity.this, HomeTabActivity.class);
-                startActivity(intent);
-                finish();
+                String user_mail = Hawk.get("email");
+                String user_password = Hawk.get("password");
+
+                OkHttpClient httpClient = new OkHttpClient();
+                String url = vars.URL_SERVER +"api/auth/login";
+
+                RequestBody formBody = new FormBody.Builder()
+                        .add("email", user_mail)
+                        .add("password", user_password)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .addHeader("Content-Type","application/x-www-form-urlencoded")
+                        .addHeader("X-Requested-With","XMLHttpRequest")
+                        .post(formBody)
+                        .build();
+
+
+                httpClient.newCall(request).enqueue(new Callback() {
+                    @Override public void onFailure(Call call, IOException e) {
+                        Log.e(vars.TAG, e.getMessage());
+                        progressdialog.dismiss();
+                        Alerter.create(MainActivity.this)
+                                .setTitle("Problema con el servidor.")
+                                .setText(e.getMessage())
+                                .setBackgroundColorRes(R.color.colorError)
+                                .show();
+
+
+                    }
+
+                    @Override public void onResponse(Call call, Response response) {
+
+                        progressdialog.dismiss();
+                        if(response.isSuccessful() && response.message() != "Unauthorized"){
+                            try{
+                                String i = response.body().string();
+
+                                Gson gson = new Gson();
+                                Properties properties = gson.fromJson(i,Properties.class);
+
+                                Hawk.put("access_token", properties.getProperty("access_token"));
+
+                                Intent intent = new Intent(MainActivity.this, HomeTabActivity.class);
+                                startActivity(intent);
+
+                                finish(); // delete this activity from stack activities
+
+
+                            }catch (Exception e){
+                                Log.e(vars.TAG, e.getMessage());
+                            }
+                        } else {
+                            Alerter.create(MainActivity.this)
+                                    .setTitle("Error")
+                                    .setText("Ocurrio un problema con tu usuario y/o contraseña.")
+                                    .setBackgroundColorRes(R.color.colorError)
+                                    .show();
+                        }
+
+                    }
+                });
+
             }else{
+                progressdialog.dismiss();
                 Alerter.create(MainActivity.this)
                         .setTitle("Ooops...")
                         .setText("Parece que tu membresía termino.")
@@ -266,12 +328,29 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
                 loadSuscriptionsLogin();
             }
         }else{
+            progressdialog.dismiss();
             Alerter.create(MainActivity.this)
                     .setTitle("Bienvenido")
                     .setText("No se ha detectado ninguna configuración incial.")
                     .setBackgroundColorRes(R.color.colorWarningMaterial)
                     .show();
         }
+    }
+
+    private void getPurchase(){
+        Purchase.PurchasesResult purchasesResult = mBillingClient.queryPurchases(SkuType.SUBS);
+        for (Purchase purchase : purchasesResult.getPurchasesList()) {
+            validLicense = true;
+            Alerter.create(MainActivity.this)
+                    .setTitle("¡Genial!")
+                    .setText("Tu licencia es: "+purchase.getOrderId())
+                    .setBackgroundColorRes(R.color.colorPrimary)
+                    .show();
+            initConfiguration();
+            break;
+        }
+        initConfiguration();
+
     }
 
     public void activateButtons(){
@@ -355,6 +434,10 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
                         .add("password", et_password_login.getText().toString())
                         .build();
 
+                Hawk.put("email", et_email_login.getText().toString());
+                Hawk.put("password", et_password_login.getText().toString());
+
+
                 Request request = new Request.Builder()
                         .url(url)
                         .addHeader("Content-Type","application/x-www-form-urlencoded")
@@ -437,6 +520,9 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
                             .add("password", et_password_signup.getText().toString())
                             .add("password_confirmation",et_password_signup.getText().toString())
                             .build();
+
+                    Hawk.put("email", et_email_signup.getText().toString());
+                    Hawk.put("password", et_password_signup.getText().toString());
 
                     Request request = new Request.Builder()
                             .url(url)
@@ -550,15 +636,6 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
     public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> skuDetailsList) {
 
         Log.e(vars.TAG, "" + billingResult.getDebugMessage()+" "+ billingResult.getResponseCode()+" SKUDETAILSCODE");
-        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK || billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED  ) {
-            for (SkuDetails skuDetails : skuDetailsList) {
-                String sku = skuDetails.getSku();
-                if (vars.SKU_YEARLY.equals(sku) || vars.SKU_MONTHLY.equals(sku)) {
-                    validLicense = true;
-                    initConfiguration();
-                    break;
-                }
-            }
-        }
+
     }
 }

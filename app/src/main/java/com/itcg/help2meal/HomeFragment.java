@@ -173,8 +173,11 @@ public class HomeFragment extends Fragment {
 
         OkHttpClient httpClient = new OkHttpClient();
 
-        gv_last = (GridView) getActivity().findViewById(R.id.gv_last_recipes);
-
+        try {
+            gv_last = (GridView) getActivity().findViewById(R.id.gv_last_recipes);
+        }catch (Exception e){
+            Log.e(vars.TAG, e.getMessage());
+        }
 
         String urlLastRecipes = vars.URL_SERVER +"api/auth/platillos-last";
         String token_user = Hawk.get("access_token");
@@ -190,7 +193,7 @@ public class HomeFragment extends Fragment {
                 .addHeader("X-Requested-With","XMLHttpRequest")
                 .addHeader("Authorization" , "Bearer " + token_user)
                 .post(formBody)
-                .build();
+                    .build();
 
         httpClient.newCall(request).enqueue(new Callback() {
             @Override public void onFailure(Call call, IOException e) {

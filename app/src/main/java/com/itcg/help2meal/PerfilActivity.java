@@ -257,6 +257,10 @@ public class PerfilActivity extends AppCompatActivity implements PurchasesUpdate
                     break;
                 }
             }
+        }else{
+            Hawk.deleteAll();
+            finish();
+            System.exit(0);
         }
     }
 

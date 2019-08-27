@@ -56,7 +56,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/et_nombre_ingredient_p"
             style="@style/InputCustom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,22 +69,24 @@
             android:inputType="textPersonName"
             android:textColor="@color/colorTextInputHint" />
 
-        <EditText
-            android:id="@+id/editText2"
-            style="@style/InputCustom"
+        <Spinner
+            android:id="@+id/spinnerUnidad"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/InputCustom"
+            android:layout_height="45dp"
             android:layout_marginBottom="25dp"
-            android:drawableLeft="@drawable/icon_scale"
-            android:drawablePadding="@dimen/space_between_icon__text_input"
-            android:ems="10"
-            android:fontFamily="@font/montserrat_regular"
-            android:hint="Kilogramo"
-            android:inputType="textPersonName"
-            android:textColor="@color/colorTextInputHint" />
+            android:spinnerMode="dropdown" />
+
+        <Spinner
+            android:id="@+id/spinnerClasificacion"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="25dp"
+            style="@style/InputCustom"
+            android:layout_height="45dp"
+            android:spinnerMode="dropdown" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/et_caducidad_ingredient_p"
             style="@style/InputCustom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,7 +100,7 @@
             android:textColor="@color/colorTextInputHint" />
 
         <EditText
-            android:id="@+id/editText4"
+            android:id="@+id/et_urlimg_ingredient_p"
             style="@style/InputCustom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,8 +109,9 @@
             android:ems="10"
             android:fontFamily="@font/montserrat_regular"
             android:hint="Imagen del ingrediente"
-            android:inputType="textPersonName"
+            android:inputType="textUri"
             android:textColor="@color/colorTextInputHint" />
+
     </LinearLayout>
 
     <Button

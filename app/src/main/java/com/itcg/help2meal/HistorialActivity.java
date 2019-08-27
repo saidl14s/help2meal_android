@@ -116,10 +116,12 @@ public class HistorialActivity extends AppCompatActivity {
             @Override public void onFailure(Call call, IOException e) {
                 Log.e(vars.TAG, e.getMessage());
                 // error
+                progressdialog.dismiss();
             }
 
             @Override public void onResponse(Call call, Response response) {
                 Log.i(vars.TAG, response.message()+" "+response.body().toString() );
+                progressdialog.dismiss();
                 try{
                     responseData = response.body().string();
                     if(response.isSuccessful()){
@@ -144,7 +146,7 @@ public class HistorialActivity extends AppCompatActivity {
                                         );
                                     }
                                     adapter = new ResultRecipesAdapter(context, dataResultRecipes);
-                                    progressdialog.dismiss();
+                                    //progressdialog.dismiss();
                                     gv_results.setAdapter(adapter);
                                     //progressdialog.dismiss();
                                 }catch (Exception e){

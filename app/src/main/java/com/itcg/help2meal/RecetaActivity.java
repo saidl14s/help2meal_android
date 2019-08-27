@@ -60,6 +60,8 @@ public class RecetaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_receta);
         StatusBarUtil.setLightMode(this);
 
+        Hawk.init(getApplicationContext()).build();
+
 
         OkHttpClient okHttpClient = new OkHttpClient();
         final ImagePipelineConfig config = OkHttpImagePipelineConfigFactory
@@ -138,8 +140,32 @@ public class RecetaActivity extends AppCompatActivity {
                     btn_cocinar_now.setVisibility(View.GONE);
                     tv_instructions_title.setVisibility(View.VISIBLE);
                     String url = vars.URL_SERVER +"api/auth/ingredientes-user-update";
+                    String urlRecipe = vars.URL_SERVER +"api/auth/platillo-user-update";
                     OkHttpClient httpClient = new OkHttpClient();
                     String token_user = Hawk.get("access_token");
+
+                    RequestBody formBodyRecipe = new FormBody.Builder()
+                            .add("platillo_id", id_recipe)
+                            .build();
+                    Request requestRecipe = new Request.Builder()
+                            .url(urlRecipe)
+                            .addHeader("Content-Type","application/x-www-form-urlencoded")
+                            .addHeader("X-Requested-With","XMLHttpRequest")
+                            .addHeader("Authorization" , "Bearer " + token_user)
+                            .post(formBodyRecipe)
+                            .build();
+                    httpClient.newCall(requestRecipe).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.e(vars.TAG, e.getMessage());
+                            // error
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) {
+                            Log.e(vars.TAG, "interes " + response.message());
+                        }
+                    });
 
                     for(int x = 0; x < dataIngredientes.size(); x++) {
                         Log.e("Gelp2mEAL",dataIngredientes.get(x).getNombre() +" "+dataIngredientes.get(x).getId() + " "+dataIngredientes.get(x).getCantidad());
@@ -147,7 +173,6 @@ public class RecetaActivity extends AppCompatActivity {
                         RequestBody formBody = new FormBody.Builder()
                                 .add("ingrediente_id", ""+dataIngredientes.get(x).getId())
                                 .add("cantidad", ""+dataIngredientes.get(x).getCantidad())
-                                .add("platillo_id", id_recipe)
                                 .build();
                         Request request = new Request.Builder()
                                  .url(url)

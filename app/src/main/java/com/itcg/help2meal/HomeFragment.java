@@ -56,6 +56,11 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        sliderView = getActivity().findViewById(R.id.new_recipes_slider);
+        gv_last = getActivity().findViewById(R.id.gv_last_recipes);
+        //gv_last = (GridView) getActivity().findViewById(R.id.gv_last_recipes);
+
+
         Tovuti.from(getContext()).monitor(new Monitor.ConnectivityListener(){
             @Override
             public void onConnectivityChanged(int connectionType, boolean isConnected, boolean isFast){
@@ -79,7 +84,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadNewRecipes(){
-        sliderView = getActivity().findViewById(R.id.new_recipes_slider);
+
         sliderView.setIndicatorAnimation(IndicatorAnimations.WORM);
         sliderView.setSliderTransformAnimation(SliderAnimations.FADETRANSFORMATION);
         sliderView.setSliderAnimationDuration(700);
@@ -172,12 +177,6 @@ public class HomeFragment extends Fragment {
     private void loadLastRecipes(){
 
         OkHttpClient httpClient = new OkHttpClient();
-
-        try {
-            gv_last = (GridView) getActivity().findViewById(R.id.gv_last_recipes);
-        }catch (Exception e){
-            Log.e(vars.TAG, e.getMessage());
-        }
 
         String urlLastRecipes = vars.URL_SERVER +"api/auth/platillos-last";
         String token_user = Hawk.get("access_token");
@@ -284,9 +283,6 @@ public class HomeFragment extends Fragment {
 
         } catch (IndexOutOfBoundsException e){}
     }
-
-
-
 
     @Nullable
     @Override

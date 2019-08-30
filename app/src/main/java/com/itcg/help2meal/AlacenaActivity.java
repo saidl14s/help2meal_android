@@ -3,15 +3,21 @@ package com.itcg.help2meal;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
+import de.mrapp.android.dialog.MaterialDialog;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -44,6 +50,7 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
     private static CategoriaAdapter adapterCategoria;
     String i = "", x = "";
     ProgressDialog progressdialog;
+    EditText et_input;
 
     @Override
     protected void onResume() {
@@ -65,6 +72,8 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
         progressdialog.setCancelable(false);
         progressdialog.setTitle("Recuperando lista de ingredientes...");
         progressdialog.show();
+
+        et_input = (EditText) findViewById(R.id.input_dialog);
 
 
         OkHttpClient httpClientClasificacion = new OkHttpClient();
@@ -90,6 +99,74 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                         .setBackgroundColorRes(R.color.colorAzul)
                         .enableSwipeToDismiss()
                         .show();
+            }
+        });
+        lv_ingredientes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,final int position, long id) {
+                // TODO Auto-generated method stub
+                /*Alerter.create(AlacenaActivity.this)
+                        .setTitle(""+dataIngredientes.get(position).getNombre())
+                        .setText(" longClick")
+                        .setIcon(R.drawable.icon_information)
+                        .setBackgroundColorRes(R.color.colorWarningMaterial)
+                        .enableSwipeToDismiss()
+                        .show();
+                        */
+
+                /*MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(AlacenaActivity.this);
+                dialogBuilder.setTitle(dataIngredientes.get(position).getNombre());
+                dialogBuilder.setMessage("Establecer cantidad manualmente");
+                //dialogBuilder.setView(edittext);
+                dialogBuilder.setView(R.layout.input_dialog);
+
+
+
+                dialogBuilder.setPositiveButton("Establecer",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.e(vars.TAG, ""+dataIngredientes.get(position).getNombre() + et_input.getText().toString());
+
+                    }
+                });
+                dialogBuilder.setNegativeButton("Cancelar",null);
+                MaterialDialog dialog = dialogBuilder.create();
+                dialog.show();*/
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(AlacenaActivity.this);
+                alertDialog.setTitle(""+dataIngredientes.get(position).getNombre() );
+                alertDialog.setMessage("Establecer cantidad manualmente");
+
+                final EditText input = new EditText(AlacenaActivity.this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                lp.setMargins(70,0,70,0);
+
+                input.setLayoutParams(lp);
+                input.setText(""+dataIngredientes.get(position).getCantidad());
+                input.setInputType( InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+                alertDialog.setView(input);
+                alertDialog.setPositiveButton("Establecer",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.e(vars.TAG, ""+dataIngredientes.get(position).getNombre() + " "+input.getText().toString());
+                                dataIngredientes.get(position).setCantidad(Integer.parseInt(input.getText().toString()));
+                                uploadInventario();
+                                loadIngredientsDB();
+                            }
+                        });
+
+                alertDialog.setNegativeButton("Cancelar",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                alertDialog.show();
+                return true;
             }
         });
 
@@ -255,10 +332,6 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
     }
 
     public void uploadInventario(){
-        /*progressdialog = new ProgressDialog(this);
-        progressdialog.setCancelable(true); //change to false
-        progressdialog.setTitle("Guardando información...");
-        progressdialog.show();*/
 
         OkHttpClient httpClient = new OkHttpClient();
 
@@ -267,7 +340,7 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
 
 
         for(int x = 0; x < dataIngredientes.size(); x++) {
-            Log.e("Gelp2mEAL",dataIngredientes.get(x).getNombre() +" "+dataIngredientes.get(x).getId() + " "+dataIngredientes.get(x).getCantidad());
+            Log.e(vars.TAG,dataIngredientes.get(x).getNombre() +" "+dataIngredientes.get(x).getId() + " "+dataIngredientes.get(x).getCantidad());
             if(dataIngredientes.get(x).getCantidad() > 0){
                 RequestBody formBody = new FormBody.Builder()
                         .add("ingrediente_id", ""+dataIngredientes.get(x).getId())
@@ -297,12 +370,7 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
             }
         }
 
-
-
-
     }
-
-
 
 
     public void showNuevoIngredienteActivity(View view){

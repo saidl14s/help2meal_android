@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.michael-rapp:android-util:2.0.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/76b759d2cc14099fab1bb225088f3c5c/android-util-2.0.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/76b759d2cc14099fab1bb225088f3c5c/android-util-2.0.1/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.michael-rapp/android-util/2.0.1/af12a083505a014513ba399321196a194c1dacc6/android-util-2.0.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.michael-rapp/android-util/2.0.1/e12db0bcc86974d1b6427b59c163cca22db1e3f/android-util-2.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

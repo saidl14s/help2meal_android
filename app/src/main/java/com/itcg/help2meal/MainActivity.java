@@ -8,6 +8,7 @@ import androidx.fragment.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.airbnb.paris.Paris;
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClient.SkuType;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -32,6 +35,9 @@ import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.androidstudy.networkmanager.Monitor;
 import com.androidstudy.networkmanager.Tovuti;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.gson.Gson;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.hawk.Hawk;
@@ -52,7 +58,7 @@ import okhttp3.Response;
 
 import static androidx.appcompat.app.AlertDialog.*;
 
-public class MainActivity extends AppCompatActivity implements PurchasesUpdatedListener, SkuDetailsResponseListener {
+public class MainActivity extends AppCompatActivity implements PurchasesUpdatedListener, SkuDetailsResponseListener, AcknowledgePurchaseResponseListener {
 
     BillingClient mBillingClient;
 
@@ -78,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
     private boolean validLicense = false;
 
     public Vars vars = new Vars();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +119,74 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
 
 
 
+    }
+
+    private void showTutorial(){
+
+        final TapTargetSequence sequence = new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(findViewById(R.id.btn_activate_signup), "Abrir cuenta", "Si es tú primera vez en esta aplicación haz click aquí, llena tus datos y abre una cuenta.")
+                                .outerCircleColor(R.color.colorPrimary)
+                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                                .targetCircleColor(R.color.colorPrimary)   // Specify a color for the target circle
+                                .titleTextSize(24)                  // Specify the size (in sp) of the title text
+                                .titleTextColor(R.color.white)      // Specify the color of the title text
+                                .descriptionTextSize(19)            // Specify the size (in sp) of the description text
+                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                                .textColor(R.color.white)            // Specify a color for both the title and description text
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(false)                   // Whether to tint the target view's color
+                                .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
+                                .targetRadius(60),
+                        TapTarget.forView(findViewById(R.id.btn_activate_login), "Iniciar sesión", "¿Tienes una cuenta? ingresa aquí con tu email y contraseña")
+                                .outerCircleColor(R.color.colorPrimary)
+                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                                .targetCircleColor(R.color.colorPrimary)   // Specify a color for the target circle
+                                .titleTextSize(24)                  // Specify the size (in sp) of the title text
+                                .titleTextColor(R.color.white)      // Specify the color of the title text
+                                .descriptionTextSize(19)            // Specify the size (in sp) of the description text
+                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                                .textColor(R.color.white)            // Specify a color for both the title and description text
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(false)                   // Whether to tint the target view's color
+                                .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
+                                .targetRadius(60),
+                        TapTarget.forView(findViewById(R.id.btn_login), "Ir", "Es momento de ir a la pantalla principal.")
+                                .outerCircleColor(R.color.colorPrimary)
+                                .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
+                                .targetCircleColor(R.color.colorPrimary)   // Specify a color for the target circle
+                                .titleTextSize(24)                  // Specify the size (in sp) of the title text
+                                .titleTextColor(R.color.white)      // Specify the color of the title text
+                                .descriptionTextSize(19)            // Specify the size (in sp) of the description text
+                                .descriptionTextColor(R.color.white)  // Specify the color of the description text
+                                .textColor(R.color.white)            // Specify a color for both the title and description text
+                                .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                .tintTarget(false)                   // Whether to tint the target view's color
+                                .transparentTarget(true)           // Specify whether the target is transparent (displays the content underneath)
+                                .targetRadius(60)
+                        )
+                .listener(new TapTargetSequence.Listener() {
+                    // This listener will tell us when interesting(tm) events happen in regards
+                    // to the sequence
+                    @Override
+                    public void onSequenceFinish() {
+                        Hawk.put("tutorial_login", true);
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+                        Log.d("TapTargetView", "Clicked on " + lastTarget.id());
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+
+                    }
+                });
+        sequence.start();
     }
 
     public boolean connectPlayStore(){
@@ -156,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
         List<String> skuList = new ArrayList<> ();
         skuList.add(vars.SKU_MONTHLY);
         skuList.add(vars.SKU_YEARLY);
+        skuList.add(vars.SKU_BIANNUAL);
         SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
         params.setSkusList(skuList).setType(SkuType.SUBS);
         mBillingClient.querySkuDetailsAsync(params.build(),
@@ -181,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
         List<String> skuList = new ArrayList<> ();
         skuList.add(vars.SKU_MONTHLY);
         skuList.add(vars.SKU_YEARLY);
+        skuList.add(vars.SKU_BIANNUAL);
         SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
         params.setSkusList(skuList).setType(SkuType.SUBS);
         mBillingClient.querySkuDetailsAsync(params.build(),
@@ -305,7 +382,11 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
 
 
                             }catch (Exception e){
-                                Log.e(vars.TAG, e.getMessage());
+                                Alerter.create(MainActivity.this)
+                                        .setTitle("Error desconocido.")
+                                        .setText(e.getMessage())
+                                        .setBackgroundColorRes(R.color.colorError)
+                                        .show();
                             }
                         } else {
                             Alerter.create(MainActivity.this)
@@ -329,26 +410,27 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
             }
         }else{
             progressdialog.dismiss();
-            Alerter.create(MainActivity.this)
-                    .setTitle("Bienvenido")
-                    .setText("No se ha detectado ninguna configuración incial.")
-                    .setBackgroundColorRes(R.color.colorWarningMaterial)
-                    .show();
+            if(!Hawk.contains("tutorial_login")){
+                //showTutorial();
+            }
+
         }
     }
 
     private void getPurchase(){
         Purchase.PurchasesResult purchasesResult = mBillingClient.queryPurchases(SkuType.SUBS);
         for (Purchase purchase : purchasesResult.getPurchasesList()) {
+            Log.e(vars.TAG, purchase.getPurchaseState()+ " "+purchase.getPurchaseTime() +" "+purchase.getOriginalJson());
+            acknowledgePurchase(purchase);
             validLicense = true;
             Alerter.create(MainActivity.this)
                     .setTitle("¡Genial!")
                     .setText("Tu licencia es: "+purchase.getOrderId())
                     .setBackgroundColorRes(R.color.colorPrimary)
                     .show();
-            initConfiguration();
             break;
         }
+
         initConfiguration();
 
     }
@@ -587,6 +669,8 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
 
     }
 
+
+
     @Override
     public void onPurchasesUpdated(BillingResult billingResult, @Nullable List<Purchase> purchases) {
         Log.e("Help2meal",""+billingResult.getResponseCode()+billingResult.getDebugMessage() );
@@ -623,6 +707,22 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
 
     }
 
+
+    void acknowledgePurchase(Purchase purchase) {
+        if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+            // Grant entitlement to the user.
+
+            // Acknowledge the purchase if it hasn't already been acknowledged.
+            if (!purchase.isAcknowledged()) {
+                AcknowledgePurchaseParams acknowledgePurchaseParams =
+                        AcknowledgePurchaseParams.newBuilder()
+                                .setPurchaseToken(purchase.getPurchaseToken())
+                                .build();
+                mBillingClient.acknowledgePurchase(acknowledgePurchaseParams, this);
+            }
+        }
+    }
+
     private boolean verifyValidSignature(String signedData, String signature) {
         try {
             return Security.verifyPurchase(vars.PUBLIC_KEY_PLAYSTORE, signedData, signature);
@@ -637,5 +737,10 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
 
         Log.e(vars.TAG, "" + billingResult.getDebugMessage()+" "+ billingResult.getResponseCode()+" SKUDETAILSCODE");
 
+    }
+
+    @Override
+    public void onAcknowledgePurchaseResponse(BillingResult billingResult) {
+        Log.e(vars.TAG, "onAcknowledgePurchaseResponse::: " + billingResult.getDebugMessage()+" "+ billingResult.getResponseCode()+" SKUDETAILSCODE");
     }
 }

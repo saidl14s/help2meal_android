@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.michael-rapp:android-material-dialog:5.1.6@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/08a85113f06a97cc9f2e280c7ec91322/android-material-dialog-5.1.6/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/08a85113f06a97cc9f2e280c7ec91322/android-material-dialog-5.1.6/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.michael-rapp/android-material-dialog/5.1.6/e3c1bf75ee3394caa3b63d7fe94bd1aa80890c34/android-material-dialog-5.1.6-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.michael-rapp/android-material-dialog/5.1.6/a40f045926b2cd3300dc949c4fa0913fc08864b7/android-material-dialog-5.1.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

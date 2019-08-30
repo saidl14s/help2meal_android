@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.michael-rapp:java-util:2.1.1@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.michael-rapp/java-util/2.1.1/a0a3527446b08b797544cc26f2d9265c9412f372/java-util-2.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.michael-rapp/java-util/2.1.1/85a423cadfb1e20115bb40c3d06bac16db28321c/java-util-2.1.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.michael-rapp/java-util/2.1.1/821f66947ffe1c84361a840a83cdcdefb2eb8f62/java-util-2.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

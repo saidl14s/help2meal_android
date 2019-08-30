@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -86,6 +87,33 @@ public class ResultadosActivity extends AppCompatActivity {
 
     }
 
+    public void setGridViewHeightBasedOnChildren(GridView gridView, ResultRecipesAdapter adapterView, int columnas) {
+
+        try {
+
+            int alturaTotal = 0;
+            int items = adapterView.getCount();
+            int filas = 0;
+
+            View listItem = adapterView.getView(0, null, gridView);
+            listItem.measure(0, 0);
+            alturaTotal = listItem.getMeasuredHeight();
+
+            float x = 1;
+
+            if (items > columnas) {
+                x = items / columnas;
+                filas = (int) (x + 1);
+                alturaTotal *= filas;
+            }
+
+            ViewGroup.LayoutParams params = gridView.getLayoutParams();
+            params.height = alturaTotal+50;
+            gridView.setLayoutParams(params);
+
+        } catch (IndexOutOfBoundsException e){}
+    }
+
     private void loadResults(String tipo_recomendacion){
         final Activity context = ResultadosActivity.this;
 
@@ -143,6 +171,7 @@ public class ResultadosActivity extends AppCompatActivity {
                                         );
                                     }
                                     adapter = new ResultRecipesAdapter(context, dataResultRecipes);
+                                    setGridViewHeightBasedOnChildren(gv_results,adapter,1);
                                     gv_results.setAdapter(adapter);
                                     progressdialog.dismiss();
                                     //progressdialog.dismiss();

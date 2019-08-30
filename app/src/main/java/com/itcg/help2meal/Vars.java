@@ -14,4 +14,5 @@ public class Vars {
     final String PUBLIC_KEY_PLAYSTORE = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxEp7HbpJgIWtdW0MqaiHvvgu7csTNSHhXEoUS0vQ3lIvJvKnrLiTlAAd78Jwaq4jsd9mkEbNueAKFo6Rdz00LkP69L7+sfKIyISzspJTdtHGmOJ40CixeRScwDcUcNBM8RpbGHYb1+iFMRSPlhRM0Kxtc5/TZ9hhrJb+NzTzH6XRqf52yFUMSZYWq1X8soGyX1Q1yC4drb5cBPYPc41Vh3W3k4bXXkYsusIOQ61YFj6pPiEUp+eX3TLSVdggWxLhrdDuvBLtjQDW13uwcqwjeNEvknXBX+/mWSKJnV0IjrkQR1hCg35FZnFp0jx7dq/ZwKrEqvc/Bfq3J1W8sOFdBwIDAQAB";
     final String SKU_YEARLY = "b8rid2pi8l3c6syykrzq.kj715tj8txntrkgr2gb0_anual";
     final String SKU_MONTHLY ="yjwjmujoegli7yht0oz5.fls1if2ez7691t3hvul0_mensual";
+    final String SKU_BIANNUAL = "0yzwkwi4jguhsmxryj4c.ie50e6eq2zkacdw74u43_semestral";
 }

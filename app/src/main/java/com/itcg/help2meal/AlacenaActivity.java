@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
-import de.mrapp.android.dialog.MaterialDialog;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -91,14 +90,48 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
 
         lv_ingredientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Alerter.create(AlacenaActivity.this)
-                        .setTitle(""+dataIngredientes.get(position).getNombre())
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                /*Alerter.create(AlacenaActivity.this)
+                        //.setTitle(""+dataIngredientes.get(position).getNombre())
                         .setText("")
                         .setIcon(R.drawable.icon_information)
                         .setBackgroundColorRes(R.color.colorAzul)
                         .enableSwipeToDismiss()
-                        .show();
+                        .show();*/
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(AlacenaActivity.this);
+                alertDialog.setTitle(""+dataIngredientes.get(position).getNombre() );
+                alertDialog.setMessage("Establecer cantidad manualmente");
+
+                final EditText input = new EditText(AlacenaActivity.this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                lp.setMargins(70,0,70,0);
+
+                input.setLayoutParams(lp);
+                input.setText(""+dataIngredientes.get(position).getCantidad());
+                input.setInputType( InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+                alertDialog.setView(input);
+                alertDialog.setPositiveButton("Establecer",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.e(vars.TAG, ""+dataIngredientes.get(position).getNombre() + " "+input.getText().toString());
+                                dataIngredientes.get(position).setCantidad(Integer.parseInt(input.getText().toString()));
+                                uploadInventario();
+                                loadIngredientsDB();
+                            }
+                        });
+
+                alertDialog.setNegativeButton("Cancelar",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                alertDialog.show();
+                //return true;
             }
         });
         lv_ingredientes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -133,7 +166,7 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                 MaterialDialog dialog = dialogBuilder.create();
                 dialog.show();*/
 
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(AlacenaActivity.this);
+                /*AlertDialog.Builder alertDialog = new AlertDialog.Builder(AlacenaActivity.this);
                 alertDialog.setTitle(""+dataIngredientes.get(position).getNombre() );
                 alertDialog.setMessage("Establecer cantidad manualmente");
 
@@ -166,6 +199,7 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                         });
 
                 alertDialog.show();
+                return true;*/
                 return true;
             }
         });
@@ -313,6 +347,15 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                                     adapter = new IngredienteAdapter(AlacenaActivity.this, dataIngredientes);
                                     lv_ingredientes.setAdapter(adapter);
                                     progressdialog.dismiss();
+
+                                    Alerter.create(AlacenaActivity.this)
+                                            .setTitle("")
+                                            .setText("Puedes cambiar las cantidades de forma manual haciendo click en el ingrediente y colocando el número deseado.")
+                                            .setIcon(R.drawable.icon_information)
+                                            .setBackgroundColorRes(R.color.colorWarningMaterial)
+                                            .enableSwipeToDismiss()
+                                            .show();
+
                                 }catch (Exception e){
                                     Log.e(vars.TAG, e.getMessage());
                                 }

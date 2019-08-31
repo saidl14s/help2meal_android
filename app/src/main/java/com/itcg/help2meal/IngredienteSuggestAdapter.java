@@ -58,6 +58,7 @@ public class IngredienteSuggestAdapter extends ArrayAdapter<Ingrediente> impleme
         TextView tipo_cantidad = (TextView) convertView.findViewById(R.id.ingredient_suggest);
         String unidad = "";
         if(dataModel.getCantidad() > 1) unidad = dataModel.getUnidad() + "s";
+        else unidad  = dataModel.getUnidad();
 
         tipo_cantidad.setText(dataModel.getCantidad() + " "+ unidad +" de " +dataModel.getNombre().toLowerCase());
 

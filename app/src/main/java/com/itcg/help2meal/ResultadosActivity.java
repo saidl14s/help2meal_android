@@ -108,7 +108,7 @@ public class ResultadosActivity extends AppCompatActivity {
             }
 
             ViewGroup.LayoutParams params = gridView.getLayoutParams();
-            params.height = alturaTotal+50;
+            params.height = alturaTotal+30;
             gridView.setLayoutParams(params);
 
         } catch (IndexOutOfBoundsException e){}

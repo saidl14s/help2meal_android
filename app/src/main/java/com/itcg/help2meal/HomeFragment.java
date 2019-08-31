@@ -278,7 +278,7 @@ public class HomeFragment extends Fragment {
             }
 
             ViewGroup.LayoutParams params = gridView.getLayoutParams();
-            params.height = alturaTotal+5;
+            params.height = alturaTotal+15;
             gridView.setLayoutParams(params);
 
         } catch (IndexOutOfBoundsException e){}

@@ -2,7 +2,9 @@ package com.itcg.help2meal;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -41,14 +44,14 @@ import okhttp3.Response;
 
 public class RecetaActivity extends AppCompatActivity {
     public Vars vars = new Vars();
-    String dataReceived = "", dataIngredients;
+    String dataReceived = "", dataIngredients, dataIngredientsRecipe ;
     ProgressDialog progressdialog;
 
     TextView tv_name_recipe, tv_time,  tv_porcion, tv_description, tv_instructions,tv_instructions_title;
     SimpleDraweeView draweeView;
-    GridView gv_ingredients_recipe_suggest;
+    GridView gv_ingredients_recipe_suggest, gv_ingredients_recipe_suggestRecipe;
     IngredienteSuggestAdapter adapterIngredient;
-    ArrayList<Ingrediente> dataIngredientes;
+    ArrayList<Ingrediente> dataIngredientes, dataIngredientesRecipe;
     Button btn_cocinar_now;
     String id_recipe;
 
@@ -78,6 +81,7 @@ public class RecetaActivity extends AppCompatActivity {
         tv_description = (TextView) findViewById(R.id.tv_description);
         draweeView = (SimpleDraweeView) findViewById(R.id.iv_recipe_banner);
         gv_ingredients_recipe_suggest = findViewById(R.id.gv_ingredients_recipe_suggest);
+        gv_ingredients_recipe_suggestRecipe = findViewById(R.id.gv_ingredients_recipe_suggestRecipe);
         btn_cocinar_now = (Button) findViewById(R.id.btn_cocinar_now);
 
 
@@ -139,7 +143,6 @@ public class RecetaActivity extends AppCompatActivity {
                     tv_instructions.setVisibility(View.VISIBLE);
                     btn_cocinar_now.setVisibility(View.GONE);
                     tv_instructions_title.setVisibility(View.VISIBLE);
-                    String url = vars.URL_SERVER +"api/auth/ingredientes-user-update";
                     String urlRecipe = vars.URL_SERVER +"api/auth/platillo-user-update";
                     OkHttpClient httpClient = new OkHttpClient();
                     String token_user = Hawk.get("access_token");
@@ -163,41 +166,29 @@ public class RecetaActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(Call call, Response response) {
-                            Log.e(vars.TAG, "interes " + response.message());
+                            Log.e(vars.TAG, response.toString());
+                            if(response.code() == 201){
+                                try{
+                                    String i = response.body().string();
+                                    Gson gson = new Gson();
+                                    Properties properties = gson.fromJson(i,Properties.class);
+
+                                    Alerter.create(RecetaActivity.this)
+                                            .setTitle("Atención!")
+                                            .setText(""+properties.getProperty("message"))
+                                            .setIcon(R.drawable.alerter_ic_notifications)
+                                            .setBackgroundColorRes(R.color.colorErrorMaterial)
+                                            .enableSwipeToDismiss()
+                                            .show();
+                                }catch (Exception e){}
+
+                            }
+
                         }
                     });
 
-                    for(int x = 0; x < dataIngredientes.size(); x++) {
-                        Log.e("Gelp2mEAL",dataIngredientes.get(x).getNombre() +" "+dataIngredientes.get(x).getId() + " "+dataIngredientes.get(x).getCantidad());
-
-                        RequestBody formBody = new FormBody.Builder()
-                                .add("ingrediente_id", ""+dataIngredientes.get(x).getId())
-                                .add("cantidad", ""+dataIngredientes.get(x).getCantidad())
-                                .build();
-                        Request request = new Request.Builder()
-                                 .url(url)
-                                .addHeader("Content-Type","application/x-www-form-urlencoded")
-                                .addHeader("X-Requested-With","XMLHttpRequest")
-                                .addHeader("Authorization" , "Bearer " + token_user)
-                                .post(formBody)
-                                .build();
-                        httpClient.newCall(request).enqueue(new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                                Log.e(vars.TAG, e.getMessage());
-
-                                // error
-                            }
-
-                            @Override
-                            public void onResponse(Call call, Response response) {
-
-
-                            }
-                        });
-                    }
                 } else {
-                    Alerter.create(RecetaActivity.this)
+                        Alerter.create(RecetaActivity.this)
                             .setTitle("Vaya!")
                             .setText("Parece que no tienes conexión a Internet. Conéctate para cocinar este platillo.")
                             .setBackgroundColorRes(R.color.colorErrorMaterial)
@@ -278,15 +269,21 @@ public class RecetaActivity extends AppCompatActivity {
 
     public void loadIngredients(String id){
         OkHttpClient httpClient = new OkHttpClient();
-
-        String url = vars.URL_SERVER +"api/auth/get-ingredients-recipe/"+id;
         String token_user = Hawk.get("access_token");
+
+
+        String url = vars.URL_SERVER +"api/auth/vget-ingredients-user-recipe";
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("platillo_id", id)
+                .build();
 
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("Content-Type","application/x-www-form-urlencoded")
                 .addHeader("X-Requested-With","XMLHttpRequest")
                 .addHeader("Authorization" , "Bearer " + token_user)
+                .post(formBody)
                 .build();
 
         httpClient.newCall(request).enqueue(new Callback() {
@@ -327,6 +324,78 @@ public class RecetaActivity extends AppCompatActivity {
                                     adapterIngredient = new IngredienteSuggestAdapter(RecetaActivity.this, dataIngredientes);
                                     setGridViewHeightBasedOnChildren(gv_ingredients_recipe_suggest,adapterIngredient,2);
                                     gv_ingredients_recipe_suggest.setAdapter(adapterIngredient);
+
+                                    Log.e(vars.TAG, dataIngredients);
+                                }catch (Exception e){
+                                    Log.e(vars.TAG, e.getMessage());
+                                }
+
+                            }
+                        });
+
+                    } else {
+                        //Log.e(vars.TAG, response.message()+" "+response.body().toString() );
+                    }
+                }catch (Exception e){
+
+                }
+
+            }
+        });
+
+        // ingredientes que no tiene el usuario pero que son requeridos en la receta
+        url = vars.URL_SERVER +"api/auth/vget-ingredients-recipe";
+
+        RequestBody formBodyRecipe = new FormBody.Builder()
+                .add("platillo_id", id)
+                .build();
+
+        Request requestRecipe = new Request.Builder()
+                .url(url)
+                .addHeader("Content-Type","application/x-www-form-urlencoded")
+                .addHeader("X-Requested-With","XMLHttpRequest")
+                .addHeader("Authorization" , "Bearer " + token_user)
+                .post(formBodyRecipe)
+                .build();
+
+        httpClient.newCall(requestRecipe).enqueue(new Callback() {
+            @Override public void onFailure(Call call, IOException e) {
+                Log.e(vars.TAG, e.getMessage());
+                // error
+            }
+
+            @Override public void onResponse(Call call, Response response) {
+
+                try {
+                    dataIngredientsRecipe = response.body().string();
+                    if(response.isSuccessful()){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try{
+                                    Gson gson = new Gson();
+
+                                    Ingrediente[] mcArray = gson.fromJson(dataIngredientsRecipe, Ingrediente[].class);
+                                    List<Ingrediente> prepareListIngredients = Arrays.asList(mcArray);
+                                    dataIngredientesRecipe = new ArrayList<>();
+
+                                    for (Ingrediente ingrediente : prepareListIngredients) {
+                                        Log.i(vars.TAG, ingrediente.getNombre() + " "+ ingrediente.getUnidad());
+                                        dataIngredientesRecipe.add(
+                                                new Ingrediente(
+                                                        ingrediente.getId(),
+                                                        ingrediente.getNombre(),
+                                                        ingrediente.getUnidad(),
+                                                        ingrediente.getCaducidad(),
+                                                        ingrediente.getClasificacion_id(),
+                                                        ingrediente.getUrl_imagen(),
+                                                        ingrediente.getCantidad()
+                                                )
+                                        );
+                                    }
+                                    adapterIngredient = new IngredienteSuggestAdapter(RecetaActivity.this, dataIngredientesRecipe);
+                                    setGridViewHeightBasedOnChildren(gv_ingredients_recipe_suggestRecipe ,adapterIngredient,2);
+                                    gv_ingredients_recipe_suggestRecipe.setAdapter(adapterIngredient);
 
                                     Log.e(vars.TAG, dataIngredients);
                                 }catch (Exception e){

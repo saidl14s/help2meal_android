@@ -58,6 +58,7 @@ public class ResultadosActivity extends AppCompatActivity {
             public void onConnectivityChanged(int connectionType, boolean isConnected, boolean isFast){
                 // TODO: Handle the connection...
                 if(isConnected){
+                    Hawk.init(getApplicationContext()).build();
                     progressdialog = new ProgressDialog(ResultadosActivity.this);
                     progressdialog.setCancelable(false);
                     progressdialog.setTitle("Armando tus recetas...");

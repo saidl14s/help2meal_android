@@ -49,7 +49,6 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
     private static CategoriaAdapter adapterCategoria;
     String i = "", x = "";
     ProgressDialog progressdialog;
-    EditText et_input;
 
     @Override
     protected void onResume() {
@@ -72,7 +71,14 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
         progressdialog.setTitle("Recuperando lista de ingredientes...");
         progressdialog.show();
 
-        et_input = (EditText) findViewById(R.id.input_dialog);
+        Alerter.create(AlacenaActivity.this)
+                .setTitle("")
+                .setText("Puedes cambiar las cantidades de forma manual haciendo click en el ingrediente y colocando el número deseado.")
+                .setIcon(R.drawable.icon_information)
+                .setBackgroundColorRes(R.color.colorWarningMaterial)
+                .enableSwipeToDismiss()
+                .setDuration(7500)
+                .show();
 
 
         OkHttpClient httpClientClasificacion = new OkHttpClient();
@@ -91,13 +97,6 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
         lv_ingredientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                /*Alerter.create(AlacenaActivity.this)
-                        //.setTitle(""+dataIngredientes.get(position).getNombre())
-                        .setText("")
-                        .setIcon(R.drawable.icon_information)
-                        .setBackgroundColorRes(R.color.colorAzul)
-                        .enableSwipeToDismiss()
-                        .show();*/
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(AlacenaActivity.this);
                 alertDialog.setTitle(""+dataIngredientes.get(position).getNombre() );
                 alertDialog.setMessage("Establecer cantidad manualmente");
@@ -119,7 +118,6 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                                 Log.e(vars.TAG, ""+dataIngredientes.get(position).getNombre() + " "+input.getText().toString());
                                 dataIngredientes.get(position).setCantidad(Integer.parseInt(input.getText().toString()));
                                 uploadInventario();
-                                loadIngredientsDB();
                             }
                         });
 
@@ -131,82 +129,8 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                         });
 
                 alertDialog.show();
-                //return true;
             }
         });
-        lv_ingredientes.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,final int position, long id) {
-                // TODO Auto-generated method stub
-                /*Alerter.create(AlacenaActivity.this)
-                        .setTitle(""+dataIngredientes.get(position).getNombre())
-                        .setText(" longClick")
-                        .setIcon(R.drawable.icon_information)
-                        .setBackgroundColorRes(R.color.colorWarningMaterial)
-                        .enableSwipeToDismiss()
-                        .show();
-                        */
-
-                /*MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(AlacenaActivity.this);
-                dialogBuilder.setTitle(dataIngredientes.get(position).getNombre());
-                dialogBuilder.setMessage("Establecer cantidad manualmente");
-                //dialogBuilder.setView(edittext);
-                dialogBuilder.setView(R.layout.input_dialog);
-
-
-
-                dialogBuilder.setPositiveButton("Establecer",new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.e(vars.TAG, ""+dataIngredientes.get(position).getNombre() + et_input.getText().toString());
-
-                    }
-                });
-                dialogBuilder.setNegativeButton("Cancelar",null);
-                MaterialDialog dialog = dialogBuilder.create();
-                dialog.show();*/
-
-                /*AlertDialog.Builder alertDialog = new AlertDialog.Builder(AlacenaActivity.this);
-                alertDialog.setTitle(""+dataIngredientes.get(position).getNombre() );
-                alertDialog.setMessage("Establecer cantidad manualmente");
-
-                final EditText input = new EditText(AlacenaActivity.this);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
-                lp.setMargins(70,0,70,0);
-
-                input.setLayoutParams(lp);
-                input.setText(""+dataIngredientes.get(position).getCantidad());
-                input.setInputType( InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-                alertDialog.setView(input);
-                alertDialog.setPositiveButton("Establecer",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Log.e(vars.TAG, ""+dataIngredientes.get(position).getNombre() + " "+input.getText().toString());
-                                dataIngredientes.get(position).setCantidad(Integer.parseInt(input.getText().toString()));
-                                uploadInventario();
-                                loadIngredientsDB();
-                            }
-                        });
-
-                alertDialog.setNegativeButton("Cancelar",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-
-                alertDialog.show();
-                return true;*/
-                return true;
-            }
-        });
-
-
-        loadIngredientsDB();
-
 
 
         String urlClasificacion = vars.URL_SERVER +"api/auth/clasificaciones-ingredientes";
@@ -274,15 +198,6 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
         btn_save_ingredientes = (Button) findViewById(R.id.btn_save_ingredientes);
         btn_save_ingredientes.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String url = vars.URL_SERVER +"api/auth/user-ingredientes-save";
-                String token_user = Hawk.get("access_token");
-
-                Request request = new Request.Builder()
-                        .url(url)
-                        .addHeader("Content-Type","application/x-www-form-urlencoded")
-                        .addHeader("X-Requested-With","XMLHttpRequest")
-                        .addHeader("Authorization" , "Bearer " + token_user)
-                        .build();
                 uploadInventario();
                 Alerter.create(AlacenaActivity.this)
                         .setTitle("Almacenado correctamente")
@@ -348,13 +263,6 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                                     lv_ingredientes.setAdapter(adapter);
                                     progressdialog.dismiss();
 
-                                    Alerter.create(AlacenaActivity.this)
-                                            .setTitle("")
-                                            .setText("Puedes cambiar las cantidades de forma manual haciendo click en el ingrediente y colocando el número deseado.")
-                                            .setIcon(R.drawable.icon_information)
-                                            .setBackgroundColorRes(R.color.colorWarningMaterial)
-                                            .enableSwipeToDismiss()
-                                            .show();
 
                                 }catch (Exception e){
                                     Log.e(vars.TAG, e.getMessage());
@@ -412,6 +320,8 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
                 });
             }
         }
+        loadIngredientsDB();
+
 
     }
 
@@ -429,7 +339,7 @@ public class AlacenaActivity extends AppCompatActivity implements CategoriaAdapt
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                uploadInventario(); // se sube lo que actualmente haya registrado
+                //uploadInventario(); // se sube lo que actualmente haya registrado
                 try{
                     Gson gson = new Gson();
 

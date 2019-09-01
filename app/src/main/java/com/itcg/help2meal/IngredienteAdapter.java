@@ -60,6 +60,7 @@ public class IngredienteAdapter extends ArrayAdapter<Ingrediente> implements Vie
         //tipo_cantidad.setText(dataModel.get);
         StepperTouch stepperTouch = convertView.findViewById(R.id.stepperTouch);
         stepperTouch.setCount(dataModel.getCantidad());
+        //stepperTouch.setCount(1);
         stepperTouch.setMinValue(0);
         stepperTouch.setMaxValue(10000);
         stepperTouch.setSideTapEnabled(true);

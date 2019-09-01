@@ -21,8 +21,10 @@ import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class CategoriaAdapter extends ArrayAdapter<Categoria>{
@@ -64,16 +66,21 @@ public class CategoriaAdapter extends ArrayAdapter<Categoria>{
 
                 // activar el 'cargando..'
 
-                url = vars.URL_SERVER +"api/auth/clasificaciones/"+v.getId();
+                url = vars.URL_SERVER +"api/auth/vget-ingredients-classification";
                 //Log.e("HELP", url);
                 OkHttpClient httpClient = new OkHttpClient();
                 String token_user = Hawk.get("access_token");
+
+                RequestBody formBody = new FormBody.Builder()
+                        .add("clasificacion_id", ""+v.getId())
+                        .build();
 
                 Request request = new Request.Builder()
                         .url(url)
                         .addHeader("Content-Type","application/x-www-form-urlencoded")
                         .addHeader("X-Requested-With","XMLHttpRequest")
                         .addHeader("Authorization" , "Bearer " + token_user)
+                        .post(formBody)
                         .build();
 
                 httpClient.newCall(request).enqueue(new Callback() {

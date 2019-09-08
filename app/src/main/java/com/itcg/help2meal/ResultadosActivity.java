@@ -197,9 +197,12 @@ public class ResultadosActivity extends AppCompatActivity {
         gv_results.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), RecetaActivity.class);
-                intent.putExtra("id_recipe", ""+adapter.getItem(position).getId());
-                startActivity(intent);
+                if(adapter.getItem(position).getId() != 0 ){
+                    Intent intent = new Intent(getApplicationContext(), RecetaActivity.class);
+                    intent.putExtra("id_recipe", ""+adapter.getItem(position).getId());
+                    startActivity(intent);
+                }
+
             }
         });
     }

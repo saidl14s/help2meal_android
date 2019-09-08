@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingResult;
@@ -40,7 +42,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class PerfilActivity extends AppCompatActivity implements PurchasesUpdatedListener, SkuDetailsResponseListener {
+public class PerfilActivity extends AppCompatActivity implements PurchasesUpdatedListener, SkuDetailsResponseListener, AcknowledgePurchaseResponseListener {
 
     public Vars vars = new Vars();
     String dataReceived = "";
@@ -157,7 +159,7 @@ public class PerfilActivity extends AppCompatActivity implements PurchasesUpdate
                     // The BillingClient is ready. You can query purchases here.
 
                     Log.e(vars.TAG, "onBillingSetupFinished: " );
-                    getShoppingHistory();
+                    getPurchase();
                 }
             }
 
@@ -169,14 +171,6 @@ public class PerfilActivity extends AppCompatActivity implements PurchasesUpdate
         return true;
     }
 
-    private void getShoppingHistory(){
-        List<String> skuList = new ArrayList<>();
-        skuList.add(vars.SKU_MONTHLY);
-        skuList.add(vars.SKU_YEARLY);
-        SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
-        params.setSkusList(skuList).setType(BillingClient.SkuType.SUBS);
-        mBillingClient.querySkuDetailsAsync(params.build(),this);
-    }
 
 
     public void checkLicence(View view){
@@ -264,10 +258,44 @@ public class PerfilActivity extends AppCompatActivity implements PurchasesUpdate
         }
     }
 
+    private void getPurchase(){
+        Purchase.PurchasesResult purchasesResult = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS);
+        for (Purchase purchase : purchasesResult.getPurchasesList()) {
+            Log.e(vars.TAG, purchase.getPurchaseState()+ " "+purchase.getPurchaseTime() +" "+purchase.getOriginalJson());
+            acknowledgePurchase(purchase);
+            //purchase.getOrderId();
+            progressdialog.dismiss();
+            et_suscripcion.setHint(purchase.getOrderId());
+            Log.e(vars.TAG,purchase.getOriginalJson());
+            break;
+        }
+
+    }
+
+    void acknowledgePurchase(Purchase purchase) {
+        if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+            // Grant entitlement to the user.
+
+            // Acknowledge the purchase if it hasn't already been acknowledged.
+            if (!purchase.isAcknowledged()) {
+                AcknowledgePurchaseParams acknowledgePurchaseParams =
+                        AcknowledgePurchaseParams.newBuilder()
+                                .setPurchaseToken(purchase.getPurchaseToken())
+                                .build();
+                mBillingClient.acknowledgePurchase(acknowledgePurchaseParams, this);
+            }
+        }
+    }
+
 
     @Override
     public void onPurchasesUpdated(BillingResult billingResult, @Nullable List<Purchase> purchases) {
         Log.e("Help2meal"," onPurchasesUpdated  : "+billingResult.getResponseCode()+billingResult.getDebugMessage() );
 
+    }
+
+    @Override
+    public void onAcknowledgePurchaseResponse(BillingResult billingResult) {
+        Log.e(vars.TAG, "onAcknowledgePurchaseResponse::: " + billingResult.getDebugMessage()+" "+ billingResult.getResponseCode()+" SKUDETAILSCODE");
     }
 }

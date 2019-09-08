@@ -7,8 +7,8 @@ android {
         applicationId "com.itcg.help2meal"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 18
-        versionName "1.6131"
+        versionCode 20
+        versionName "1.6132"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
